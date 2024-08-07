@@ -60,8 +60,7 @@
                     "ui.codelenses": {
                         "gc_details": true,
                         "run_govulncheck": true
-                    },
-                    "ui.semanticTokens": true
+                    }
                 }
             },
             "extensions": [
