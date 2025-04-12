@@ -5,8 +5,39 @@ set -euo pipefail
 # This script upgrades the devcontainer-feature-lock.json files in the src directory.
 
 DRYRUN=${DRYRUN:-false}
+ARCHLINUX_CONTAINER_NAME="archlinux-vercmp"
 
-# Function to fetch the latest version for Arch Linux packages
+start_archlinux_container() {
+    echo "Starting Arch Linux container..."
+    docker run -d --rm --name "$ARCHLINUX_CONTAINER_NAME" archlinux:latest bash -c "
+        pacman-key --init &&
+        pacman-key --populate archlinux &&
+        pacman -Sy --noconfirm pacman-contrib &&
+        tail -f /dev/null
+    "
+}
+
+wait_for_container() {
+    echo "Waiting for Arch Linux container to be ready..."
+    for i in {1..10}; do
+        if docker exec "$ARCHLINUX_CONTAINER_NAME" true >/dev/null 2>&1; then
+            echo "OK. Arch Linux container is ready."
+            echo
+            return
+        fi
+        echo "Waiting for container... ($i/10)"
+        sleep 1
+    done
+    echo "Error: Arch Linux container did not become ready in time." >&2
+    exit 1
+}
+
+stop_archlinux_container() {
+    echo "Stopping Arch Linux container..."
+    docker stop "$ARCHLINUX_CONTAINER_NAME" >/dev/null 2>&1 || true
+    echo "Ok. Container stopped."
+}
+
 fetch_archlinux_version() {
     local archlinux_source="$1" package_name
     package_name=$(basename "$archlinux_source")
@@ -16,13 +47,11 @@ fetch_archlinux_version() {
     }
 }
 
-# Function to fetch the latest version using a custom command
 fetch_custom_version() {
     local check_command="$1"
     eval "$check_command"
 }
 
-# Function to compare versions
 compare_versions() {
     local current_version="$1"
     local latest_version="$2"
@@ -30,7 +59,7 @@ compare_versions() {
 
     case "$versioning_type" in
     archlinux)
-        result=$(vercmp "$current_version" "$latest_version")
+        result=$(docker exec "$ARCHLINUX_CONTAINER_NAME" vercmp "$current_version" "$latest_version")
         ;;
     semver)
         if [ "$(printf '%s\n%s' "$current_version" "$latest_version" | sort -V | head -n 1)" == "$current_version" ]; then
@@ -161,4 +190,7 @@ process_feature_lock_files() {
     echo "======================================"
 }
 
+start_archlinux_container
+wait_for_container
+trap stop_archlinux_container EXIT
 process_feature_lock_files
