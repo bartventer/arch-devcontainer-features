@@ -1,25 +1,25 @@
 {
-  "id": "azure-cli",
-  "version": "1.0.3",
-  "name": "Azure CLI",
-  "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/azure-cli",
-  "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
-  "description": "Installs the Azure CLI and needed dependencies.",
-  "options": {},
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "ms-vscode.azure-account",
-        "ms-vscode.vscode-node-azure-pack"
-      ]
-    }
-  },
-  "installsAfter": [
-    "ghcr.io/bartventer/arch-devcontainer-features/common-utils"
-  ],
-  "keywords": [
-    "arch linux",
-    "azure-cli",
-    "azure"
-  ]
+    "id": "azure-cli",
+    "version": "1.0.3",
+    "name": "Azure CLI",
+    "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/azure-cli",
+    "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
+    "description": "Installs the Azure CLI and needed dependencies.",
+    "options": {},
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.azure-account",
+                "ms-vscode.vscode-node-azure-pack"
+            ]
+        }
+    },
+    "installsAfter": [
+        "ghcr.io/bartventer/arch-devcontainer-features/common-utils"
+    ],
+    "keywords": [
+        "arch linux",
+        "azure-cli",
+        "azure"
+    ]
 }
