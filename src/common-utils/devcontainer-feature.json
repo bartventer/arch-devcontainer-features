@@ -1,74 +1,74 @@
 {
-  "id": "common-utils",
-  "version": "1.4.5",
-  "name": "Common Utilities",
-  "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/common-utils",
-  "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
-  "description": "Provides common utilities, Oh My Zsh!, and a non-root user setup on Arch Linux. Notably, the 'additionalPackages' option simplifies the inclusion of packages that would otherwise need separate features in non-Arch OS.",
-  "options": {
-    "installZsh": {
-      "type": "boolean",
-      "default": true,
-      "description": "Install ZSH?"
+    "id": "common-utils",
+    "version": "1.4.5",
+    "name": "Common Utilities",
+    "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/common-utils",
+    "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
+    "description": "Provides common utilities, Oh My Zsh!, and a non-root user setup on Arch Linux. Notably, the 'additionalPackages' option simplifies the inclusion of packages that would otherwise need separate features in non-Arch OS.",
+    "options": {
+        "installZsh": {
+            "type": "boolean",
+            "default": true,
+            "description": "Install ZSH?"
+        },
+        "additionalPackages": {
+            "type": "string",
+            "description": "List of additional packages to install. Simplifies inclusion of packages that would otherwise need separate features in non-Arch OS.",
+            "default": "",
+            "proposals": [
+                "nodejs yarn npm make jq yq github-cli"
+            ]
+        },
+        "configureZshAsDefaultShell": {
+            "type": "boolean",
+            "default": false,
+            "description": "Change default shell to ZSH?"
+        },
+        "installOhMyZsh": {
+            "type": "boolean",
+            "default": true,
+            "description": "Install Oh My Zsh!?"
+        },
+        "installOhMyZshConfig": {
+            "type": "boolean",
+            "default": true,
+            "description": "Allow installing the default dev container .zshrc templates?"
+        },
+        "username": {
+            "type": "string",
+            "proposals": [
+                "devcontainer",
+                "vscode",
+                "codespace",
+                "none",
+                "automatic"
+            ],
+            "default": "automatic",
+            "description": "Enter name of a non-root user to configure or none to skip"
+        },
+        "userUid": {
+            "type": "string",
+            "proposals": [
+                "1001",
+                "automatic"
+            ],
+            "default": "automatic",
+            "description": "Enter UID for non-root user"
+        },
+        "userGid": {
+            "type": "string",
+            "proposals": [
+                "1001",
+                "automatic"
+            ],
+            "default": "automatic",
+            "description": "Enter GID for non-root user"
+        }
     },
-    "additionalPackages": {
-      "type": "string",
-      "description": "List of additional packages to install. Simplifies inclusion of packages that would otherwise need separate features in non-Arch OS.",
-      "default": "",
-      "proposals": [
-        "nodejs yarn npm make jq yq github-cli"
-      ]
-    },
-    "configureZshAsDefaultShell": {
-      "type": "boolean",
-      "default": false,
-      "description": "Change default shell to ZSH?"
-    },
-    "installOhMyZsh": {
-      "type": "boolean",
-      "default": true,
-      "description": "Install Oh My Zsh!?"
-    },
-    "installOhMyZshConfig": {
-      "type": "boolean",
-      "default": true,
-      "description": "Allow installing the default dev container .zshrc templates?"
-    },
-    "username": {
-      "type": "string",
-      "proposals": [
-        "devcontainer",
-        "vscode",
-        "codespace",
-        "none",
-        "automatic"
-      ],
-      "default": "automatic",
-      "description": "Enter name of a non-root user to configure or none to skip"
-    },
-    "userUid": {
-      "type": "string",
-      "proposals": [
-        "1001",
-        "automatic"
-      ],
-      "default": "automatic",
-      "description": "Enter UID for non-root user"
-    },
-    "userGid": {
-      "type": "string",
-      "proposals": [
-        "1001",
-        "automatic"
-      ],
-      "default": "automatic",
-      "description": "Enter GID for non-root user"
-    }
-  },
-  "keywords": [
-    "arch linux",
-    "zsh",
-    "oh my zsh!",
-    "common utilities"
-  ]
+    "keywords": [
+        "arch linux",
+        "zsh",
+        "oh my zsh!",
+        "common utilities"
+    ]
 }
