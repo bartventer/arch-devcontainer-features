@@ -17,7 +17,7 @@ start_archlinux_container() {
     "
 }
 
-wait_for_container() {
+wait_for_archlinux_container() {
     echo "Waiting for Arch Linux container to be ready..."
     for i in {1..10}; do
         if docker exec "$ARCHLINUX_CONTAINER_NAME" true >/dev/null 2>&1; then
@@ -92,26 +92,6 @@ compare_versions() {
         echo "Error comparing versions. Expected 0, 1, or -1 but got $result."
         exit 1
     fi
-}
-
-# Function to increment semantic versioning
-# This function assumes the version format is major.minor.patch
-# It increments the patch version by 1.
-# Example: 1.2.3 -> 1.2.4
-# Note: This function is used to increment devcontainer-feature.json "version" property.
-increment_semver() {
-    local version="$1"
-    local major minor patch
-
-    # Validate the version format (must be major.minor.patch)
-    if [[ ! "$version" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
-        echo "Error: Invalid version format. Expected major.minor.patch" >&2
-        return 1
-    fi
-
-    IFS='.' read -r major minor patch <<<"$version"
-    ((patch++))
-    echo "$major.$minor.$patch"
 }
 
 # Main function to process each devcontainer-feature-lock.json file
@@ -191,6 +171,6 @@ process_feature_lock_files() {
 }
 
 start_archlinux_container
-wait_for_container
+wait_for_archlinux_container
 trap stop_archlinux_container EXIT
 process_feature_lock_files
