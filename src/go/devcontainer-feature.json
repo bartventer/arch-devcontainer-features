@@ -1,98 +1,98 @@
 {
-  "id": "go",
-  "version": "1.5.1",
-  "name": "Go",
-  "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/go",
-  "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
-  "description": "Installs Go and common Go utilities.",
-  "options": {
-    "golangciLintVersion": {
-      "type": "string",
-      "default": "latest",
-      "description": "Version of golangci-lint to install (https://github.com/golangci/golangci-lint/releases).",
-      "proposals": [
-        "latest",
-        "v1.58.1",
-        "none"
-      ]
-    },
-    "installGoReleaser": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether to install GoReleaser (https://goreleaser.com/)."
-    },
-    "installGox": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether to install gox, a tool for Go cross compilation that parallelizes builds for multiple platforms (https://github.com/mitchellh/gox)."
-    },
-    "installKo": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether to install ko, a container image builder for Go applications (https://github.com/ko-build/ko)."
-    },
-    "installYaegi": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether to install Yaegi, a Go interpreter that includes the yaegi command-line interpreter/REPL (https://github.com/traefik/yaegi)."
-    },
-    "installAir": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether to install Air, a live reload tool for Go applications (https://github.com/cosmtrek/air)."
-    },
-    "installCobraCli": {
-      "type": "boolean",
-      "default": false,
-      "description": "Whether to install Cobra CLI, a library for creating powerful modern CLI applications (https://github.com/spf13/cobra-cli/blob/main/README.md)."
-    }
-  },
-  "init": true,
-  "customizations": {
-    "vscode": {
-      "settings": {
-        "go.lintTool": "golangci-lint",
-        "go.lintFlags": [
-          "--fast",
-          "--fix"
-        ],
-        "gopls": {
-          "ui.codelenses": {
-            "gc_details": true,
-            "run_govulncheck": true
-          }
+    "id": "go",
+    "version": "1.5.1",
+    "name": "Go",
+    "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/go",
+    "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
+    "description": "Installs Go and common Go utilities.",
+    "options": {
+        "golangciLintVersion": {
+            "type": "string",
+            "default": "latest",
+            "description": "Version of golangci-lint to install (https://github.com/golangci/golangci-lint/releases).",
+            "proposals": [
+                "latest",
+                "v1.58.1",
+                "none"
+            ]
+        },
+        "installGoReleaser": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to install GoReleaser (https://goreleaser.com/)."
+        },
+        "installGox": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to install gox, a tool for Go cross compilation that parallelizes builds for multiple platforms (https://github.com/mitchellh/gox)."
+        },
+        "installKo": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to install ko, a container image builder for Go applications (https://github.com/ko-build/ko)."
+        },
+        "installYaegi": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to install Yaegi, a Go interpreter that includes the yaegi command-line interpreter/REPL (https://github.com/traefik/yaegi)."
+        },
+        "installAir": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to install Air, a live reload tool for Go applications (https://github.com/cosmtrek/air)."
+        },
+        "installCobraCli": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to install Cobra CLI, a library for creating powerful modern CLI applications (https://github.com/spf13/cobra-cli/blob/main/README.md)."
         }
-      },
-      "extensions": [
-        "golang.Go",
-        "766b.go-outliner",
-        "jinliming2.vscode-go-template",
-        "premparihar.gotestexplorer"
-      ]
-    }
-  },
-  "containerEnv": {
-    "GOPATH": "/go",
-    "GOROOT": "/usr/lib/go",
-    "PATH": "/go/bin:/usr/lib/go/bin:${PATH}"
-  },
-  "capAdd": [
-    "SYS_PTRACE"
-  ],
-  "securityOpt": [
-    "seccomp=unconfined"
-  ],
-  "installsAfter": [
-    "ghcr.io/bartventer/arch-devcontainer-features/common-utils"
-  ],
-  "keywords": [
-    "arch linux",
-    "go",
-    "golang",
-    "golangci-lint",
-    "goreleaser",
-    "gox",
-    "ko",
-    "yaegi"
-  ]
+    },
+    "init": true,
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "go.lintTool": "golangci-lint",
+                "go.lintFlags": [
+                    "--fast",
+                    "--fix"
+                ],
+                "gopls": {
+                    "ui.codelenses": {
+                        "gc_details": true,
+                        "run_govulncheck": true
+                    }
+                }
+            },
+            "extensions": [
+                "golang.Go",
+                "766b.go-outliner",
+                "jinliming2.vscode-go-template",
+                "premparihar.gotestexplorer"
+            ]
+        }
+    },
+    "containerEnv": {
+        "GOPATH": "/go",
+        "GOROOT": "/usr/lib/go",
+        "PATH": "/go/bin:/usr/lib/go/bin:${PATH}"
+    },
+    "capAdd": [
+        "SYS_PTRACE"
+    ],
+    "securityOpt": [
+        "seccomp=unconfined"
+    ],
+    "installsAfter": [
+        "ghcr.io/bartventer/arch-devcontainer-features/common-utils"
+    ],
+    "keywords": [
+        "arch linux",
+        "go",
+        "golang",
+        "golangci-lint",
+        "goreleaser",
+        "gox",
+        "ko",
+        "yaegi"
+    ]
 }
