@@ -1,0 +1,10 @@
+{
+    "packages": [
+        {
+            "name": "aws-cli",
+            "version": "1.38.1-1",
+            "versioningType": "archlinux",
+            "archlinuxSource": "https://archlinux.org/packages/extra/any/aws-cli/"
+        }
+    ]
+}

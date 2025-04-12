@@ -1,0 +1,16 @@
+{
+  "packages": [
+    {
+      "name": "git",
+      "version": "2.49.0-1",
+      "versioningType": "archlinux",
+      "archlinuxSource": "https://archlinux.org/packages/extra/x86_64/git/"
+    },
+    {
+      "name": "curl",
+      "version": "8.13.0-1",
+      "versioningType": "archlinux",
+      "archlinuxSource": "https://archlinux.org/packages/core/x86_64/curl/"
+    }
+  ]
+}

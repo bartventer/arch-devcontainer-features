@@ -1,0 +1,10 @@
+{
+  "packages": [
+    {
+      "name": "go",
+      "version": "2:1.24.2-1",
+      "versioningType": "archlinux",
+      "archlinuxSource": "https://archlinux.org/packages/extra/x86_64/go/"
+    }
+  ]
+}

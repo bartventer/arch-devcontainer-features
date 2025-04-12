@@ -1,0 +1,10 @@
+{
+  "packages": [
+    {
+      "name": "terraform",
+      "version": "1.11.3-1",
+      "versioningType": "archlinux",
+      "archlinuxSource": "https://archlinux.org/packages/extra/x86_64/terraform/"
+    }
+  ]
+}

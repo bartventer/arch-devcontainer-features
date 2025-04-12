@@ -1,35 +1,35 @@
 {
-    "id": "gcloud-cli",
-    "version": "1.0.3",
-    "name": "Google Cloud CLI",
-    "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/gcloud-cli",
-    "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
-    "description": "Installs the Google Cloud CLI, including 'gcloud' for interacting with Google Cloud, 'bq' for BigQuery, and 'gsutil' for Cloud Storage.",
-    "options": {
-        "version": {
-            "type": "string",
-            "default": "latest",
-            "description": "Select or enter a version of the Google Cloud CLI"
-        }
-    },
-    "customizations": {
-        "vscode": {
-            "extensions": []
-        }
-    },
-    "installsAfter": [
-        "ghcr.io/bartventer/arch-devcontainer-features/common-utils"
-    ],
-    "containerEnv": {
-        "PATH": "$PATH:/usr/local/google-cloud-sdk/bin"
-    },
-    "keywords": [
-        "arch linux",
-        "google cloud",
-        "gcloud",
-        "bq",
-        "gsutil",
-        "cloud",
-        "gcp"
-    ]
+  "id": "gcloud-cli",
+  "version": "1.0.4",
+  "name": "Google Cloud CLI",
+  "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/gcloud-cli",
+  "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
+  "description": "Installs the Google Cloud CLI, including 'gcloud' for interacting with Google Cloud, 'bq' for BigQuery, and 'gsutil' for Cloud Storage.",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Select or enter a version of the Google Cloud CLI"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": []
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/bartventer/arch-devcontainer-features/common-utils"
+  ],
+  "containerEnv": {
+    "PATH": "$PATH:/usr/local/google-cloud-sdk/bin"
+  },
+  "keywords": [
+    "arch linux",
+    "google cloud",
+    "gcloud",
+    "bq",
+    "gsutil",
+    "cloud",
+    "gcp"
+  ]
 }
