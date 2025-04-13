@@ -88,29 +88,85 @@ get_golangci_package_path() {
     fi
 }
 
-# add_cobra_cli_autocompletion Adds shell auto-completion for Cobra CLI.
-# Supported shells: bash, zsh, fish
-add_cobra_cli_autocompletion() {
-    command_name="cobra-cli"
-    echo "Enabling shell auto-completion for $command_name..."
-    tmp_file=$(mktemp)
+# golangci_lint_v2_compatibility is a temporary hack to ensure compatibility with golangci-lint v2.
+# https://github.com/golang/vscode-go/issues/3732#issuecomment-2758960259
+golangci_lint_v2_compatibility() {
+    major_version="$1"
+    if [ "$major_version" = 2 ]; then
+        install_path="${GOBIN:-${GOPATH:-$HOME/go}/bin}"
+        golangci_lint_path="${install_path}/golangci-lint"
+        symlink_path="${install_path}/golangci-lint-v2"
 
-    # Helper function to handle common logic
-    handle_shell() {
-        shell_name=$1
-        if [ -f "$HOME/.${shell_name}rc" ] || type "$shell_name" >/dev/null 2>&1; then
-            echo "Setting up auto-completion for $shell_name..."
-            cobra-cli completion "$shell_name" >"$tmp_file"
-            enable_autocompletion "$tmp_file" "$command_name"
+        echo_msg "Ensuring golangci-lint/v2 compatibility by creating or verifying symlink for diagnostics."
+        if [ -x "$golangci_lint_path" ]; then
+            if [ ! -L "$symlink_path" ]; then
+                ln -sfv "$golangci_lint_path" "$symlink_path"
+            else
+                echo "Symlink already exists: $symlink_path"
+            fi
+            echo_ok "Completed golangci-lint/v2 compatibility."
+        else
+            echo "Error: $golangci_lint_path does not exist or is not executable."
+            exit 1
         fi
-    }
+    fi
+}
 
-    for shell_name in zsh bash fish; do
-        handle_shell "$shell_name"
-    done
+# dump_golangci_upgrade_script creates a script to upgrade GolangCI-Lint.
+dump_golangci_upgrade_script() {
+    echo_msg "Creating upgrade script for GolangCI-Lint..."
+    upgrade_script_path="/usr/local/bin/go-golangci-lint-upgrade.sh"
+    mkdir -p "$(dirname "$upgrade_script_path")"
+    cat <<'EOF' >"$upgrade_script_path"
+#!/usr/bin/env bash
+# This script upgrades GolangCI-Lint to the specified version or the latest version.
+# Usage: ./go-golangci-lint-upgrade.sh <version>
+# Example: ./go-golangci-lint-upgrade.sh latest
 
-    # Clean up
-    rm "$tmp_file" >/dev/null
+set -euo pipefail
+
+GOLANGCI_LINT_VERSION=${1:-"latest"}
+INSTALL_PATH="${GOBIN:-${GOPATH:-$HOME/go}/bin}"
+
+if ! command -v golangci-lint >/dev/null; then
+    echo "Error: GolangCI-Lint is not installed. Please install it first."
+    exit 1
+fi
+
+if [ "$GOLANGCI_LINT_VERSION" = "latest" ]; then
+    GOLANGCI_LINT_VERSION=$(curl -sL "https://api.github.com/repos/golangci/golangci-lint/releases/latest" | jq -r '.tag_name')
+fi
+
+MAJOR_VERSION=$(echo "$GOLANGCI_LINT_VERSION" | grep -oE '^[^0-9]*([0-9]+)' | cut -d'v' -f2 || echo 1)
+PACKAGE="github.com/golangci/golangci-lint${MAJOR_VERSION:+/v$MAJOR_VERSION}/cmd/golangci-lint@$GOLANGCI_LINT_VERSION"
+
+# Remove existing symlink if it exists
+if [ -L "$INSTALL_PATH/golangci-lint-v2" ]; then
+    echo "Removing existing symlink: $INSTALL_PATH/golangci-lint-v2"
+    rm -fv "$INSTALL_PATH/golangci-lint-v2"
+fi
+
+echo "Installing GolangCI-Lint version $GOLANGCI_LINT_VERSION..."
+go install -v "$PACKAGE" || {
+    echo "Error: Failed to install GolangCI-Lint version $GOLANGCI_LINT_VERSION."
+    exit 1
+}
+
+# Create a symlink for diagnostics (v2 compatibility)
+if [[ "$MAJOR_VERSION" == 2 ]]; then
+    echo "Creating symlink for diagnostics (v2 compatibility)..."
+    ln -sfv "$INSTALL_PATH/golangci-lint" "$INSTALL_PATH/golangci-lint-v2"
+fi
+
+
+echo "GolangCI-Lint upgraded to version $GOLANGCI_LINT_VERSION."
+EOF
+    chmod +x "$upgrade_script_path"
+    echo "Upgrade script created at $upgrade_script_path"
+    echo "You can run the script with the following command:"
+    echo "  $upgrade_script_path <version>"
+    echo "Replace <version> with the desired version (e.g., latest, v2, 1.50.0)."
+    echo "You can also run the script without arguments to install the latest version."
 }
 
 # ***********************
@@ -204,7 +260,8 @@ GO_TOOLS="\
     github.com/766b/go-outliner@latest"
 
 if [ "$GOLANGCI_LINT_VERSION" != "none" ]; then
-    GO_TOOLS="${GO_TOOLS} $(get_golangci_package_path "$GOLANGCI_LINT_VERSION")"
+    GOLANGCI_LINT_PACKAGE=$(get_golangci_package_path "$GOLANGCI_LINT_VERSION")
+    GO_TOOLS="${GO_TOOLS} ${GOLANGCI_LINT_PACKAGE}"
 fi
 
 if [ "$INSTALL_AIR" = "true" ]; then
@@ -218,77 +275,31 @@ fi
 echo_msg "Installing Go tools..."
 echo "${GO_TOOLS}" | xargs -n 1 go install
 
-if [ "$(command -v cobra-cli)" ]; then
-    add_cobra_cli_autocompletion
+# Completion directories
+_BASH_COMPLETION_DIR="/etc/bash_completion.d"
+_ZSH_COMPLETION_DIR="$HOME/.oh-my-zsh/custom/completions"
+_FISH_COMPLETION_DIR="$HOME/.config/fish/completions"
+
+if [ "$INSTALL_COBRA_CLI" = "true" ]; then
+    echo_msg "Installing cobra-cli completion scripts..."
+    mkdir -pv "$_BASH_COMPLETION_DIR" "$_ZSH_COMPLETION_DIR" "$_FISH_COMPLETION_DIR"
+    cobra-cli completion bash >"$_BASH_COMPLETION_DIR/cobra-cli"
+    cobra-cli completion zsh >"$_ZSH_COMPLETION_DIR/_cobra-cli"
+    cobra-cli completion fish >"$_FISH_COMPLETION_DIR/cobra-cli.fish"
+    echo_ok "cobra-cli completion scripts installed."
 fi
-
-# golangci_lint_v2_compatibility is a temporary hack to ensure compatibility with golangci-lint v2.
-# https://github.com/golang/vscode-go/issues/3732#issuecomment-2758960259
-golangci_lint_v2_compatibility() {
-    if [ "$(get_major_version "$GOLANGCI_LINT_VERSION")" = 2 ]; then
-        install_path="${GOBIN:-${GOPATH:-$HOME/go}/bin}"
-        golangci_lint_path="${install_path}/golangci-lint"
-        symlink_path="${install_path}/golangci-lint-v2"
-
-        echo_msg "Ensuring golangci-lint/v2 compatibility by creating or verifying symlink for diagnostics."
-        if [ -x "$golangci_lint_path" ]; then
-            if [ ! -L "$symlink_path" ]; then
-                ln -sf "$golangci_lint_path" "$symlink_path"
-                echo "Created symlink: $symlink_path -> $golangci_lint_path"
-            else
-                echo "Symlink already exists: $symlink_path"
-            fi
-            echo_ok "Completed golangci-lint/v2 compatibility."
-        else
-            echo "Error: $golangci_lint_path does not exist or is not executable."
-            exit 1
-        fi
-    fi
-}
-# dump_golangci_upgrade_script creates a script to upgrade GolangCI-Lint.
-dump_golangci_upgrade_script() {
-    echo_msg "Creating upgrade script for GolangCI-Lint..."
-    upgrade_script_path="/usr/local/bin/go-golangci-lint-upgrade.sh"
-    cat <<'EOF' >"$upgrade_script_path"
-#!/usr/bin/env bash
-# This script upgrades GolangCI-Lint to the specified version or the latest version.
-# Usage: ./go-golangci-lint-upgrade.sh <version>
-# Example: ./go-golangci-lint-upgrade.sh latest
-
-set -e
-
-GOLANGCI_LINT_VERSION=${1:-"latest"}
-
-INSTALL_PATH="${GOBIN:-${GOPATH:-$HOME/go}/bin}"
-GOLANGCI_LINT_PATH="${INSTALL_PATH}/golangci-lint"
-SYMLINK_PATH="${INSTALL_PATH}/golangci-lint-v2"
-
-echo "Removing old GolangCI-Lint binary..."
-rm -f "$GOLANGCI_LINT_PATH" "$SYMLINK_PATH"
-
-echo "Installing GolangCI-Lint version $GOLANGCI_LINT_VERSION..."
-go install "github.com/golangci/golangci-lint/cmd/golangci-lint@${GOLANGCI_LINT_VERSION}"
-
-# Handle symlink for v2 compatibility
-if [ "$(echo "$GOLANGCI_LINT_VERSION" | grep -o '^v2')" = "v2" ]; then
-    ln -sf "$GOLANGCI_LINT_PATH" "$SYMLINK_PATH"
-    echo "Created symlink: $SYMLINK_PATH -> $GOLANGCI_LINT_PATH"
-fi
-
-echo "GolangCI-Lint upgraded to version $GOLANGCI_LINT_VERSION."
-EOF
-    chmod +x "$HOME/go-golangci-lint-upgrade.sh"
-    echo "Upgrade script created at $HOME/go-golangci-lint-upgrade.sh"
-    echo "You can run the script with the following command:"
-    echo "  $HOME/go-golangci-lint-upgrade.sh <version>"
-    echo "Replace <version> with the desired version (e.g., latest, v2, 1.50.0)."
-    echo "You can also run the script without arguments to install the latest version."
-    unset upgrade_script_path
-}
 
 if [ "$GOLANGCI_LINT_VERSION" != "none" ]; then
-    golangci_lint_v2_compatibility
+    _version=$(basename "$(echo "$GOLANGCI_LINT_PACKAGE" | cut -d'@' -f2)")
+    golangci_lint_v2_compatibility "$(get_major_version "$_version")"
     dump_golangci_upgrade_script
+
+    echo_msg "Installing golangci-lint completion scripts..."
+    mkdir -pv "$_BASH_COMPLETION_DIR" "$_ZSH_COMPLETION_DIR" "$_FISH_COMPLETION_DIR"
+    golangci-lint completion bash >"$_BASH_COMPLETION_DIR/golangci-lint"
+    golangci-lint completion zsh >"$_ZSH_COMPLETION_DIR/_golangci-lint"
+    golangci-lint completion fish >"$_FISH_COMPLETION_DIR/golangci-lint.fish"
+    echo_ok "golangci-lint completion scripts installed."
 fi
 
 echo "Done. Successfully installed Go and Go tools."
