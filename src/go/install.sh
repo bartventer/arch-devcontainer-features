@@ -277,8 +277,8 @@ echo "${GO_TOOLS}" | xargs -n 1 go install
 
 # Completion directories
 _BASH_COMPLETION_DIR="/etc/bash_completion.d"
-_ZSH_COMPLETION_DIR="$HOME/.oh-my-zsh/custom/completions"
-_FISH_COMPLETION_DIR="$HOME/.config/fish/completions"
+_ZSH_COMPLETION_DIR="/usr/share/zsh/site-functions"
+_FISH_COMPLETION_DIR="/usr/share/fish/vendor_completions.d"
 
 if [ "$INSTALL_COBRA_CLI" = "true" ]; then
     echo_msg "Installing cobra-cli completion scripts..."
