@@ -173,5 +173,5 @@ process_feature_lock_files() {
 
 start_archlinux_container
 wait_for_archlinux_container
+trap stop_archlinux_container EXIT
 process_feature_lock_files
-stop_archlinux_container
