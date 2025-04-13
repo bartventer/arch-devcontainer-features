@@ -1,70 +1,70 @@
 {
-    "id": "docker-outside-of-docker",
-    "version": "1.3.5",
-    "name": "Docker (docker-outside-of-docker)",
-    "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/docker-outside-of-docker",
-    "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
-    "description": "Re-use the host docker socket, adding the Docker CLI to a container. Feature invokes a script to enable using a forwarded Docker socket within a container to run Docker commands.",
-    "options": {
-        "version": {
-            "type": "string",
-            "proposals": [
-                "latest",
-                "none",
-                "20.10"
-            ],
-            "default": "latest",
-            "description": "Select or enter a Docker/Moby CLI version. (Availability can vary by OS version.)"
-        },
-        "dockerDashComposeVersion": {
-            "type": "string",
-            "enum": [
-                "none",
-                "v1",
-                "v2"
-            ],
-            "default": "v2",
-            "description": "Compose version to use for docker-compose (v1 or v2 or none)"
-        },
-        "installDockerBuildx": {
-            "type": "boolean",
-            "default": true,
-            "description": "Install Docker Buildx"
-        },
-        "installDockerComposeSwitch": {
-            "type": "boolean",
-            "default": true,
-            "description": "Install Compose Switch (provided docker compose is available) which is a replacement to the Compose V1 docker-compose (python) executable. It translates the command line into Compose V2 docker compose then runs the latter."
-        },
-        "enableDockerAutocompletion": {
-            "type": "boolean",
-            "default": true,
-            "description": "Enable Docker CLI autocompletion"
-        }
+  "id": "docker-outside-of-docker",
+  "version": "1.3.5",
+  "name": "Docker (docker-outside-of-docker)",
+  "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/docker-outside-of-docker",
+  "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
+  "description": "Re-use the host docker socket, adding the Docker CLI to a container. Feature invokes a script to enable using a forwarded Docker socket within a container to run Docker commands.",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": [
+        "latest",
+        "none",
+        "20.10"
+      ],
+      "default": "latest",
+      "description": "Select or enter a Docker/Moby CLI version. (Availability can vary by OS version.)"
     },
-    "entrypoint": "/usr/local/share/docker-init.sh",
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "ms-azuretools.vscode-docker"
-            ]
-        }
+    "dockerDashComposeVersion": {
+      "type": "string",
+      "enum": [
+        "none",
+        "v1",
+        "v2"
+      ],
+      "default": "v2",
+      "description": "Compose version to use for docker-compose (v1 or v2 or none)"
     },
-    "mounts": [
-        {
-            "source": "/var/run/docker.sock",
-            "target": "/var/run/docker-host.sock",
-            "type": "bind"
-        }
-    ],
-    "installsAfter": [
-        "ghcr.io/bartventer/arch-devcontainer-features/common-utils"
-    ],
-    "keywords": [
-        "arch linux",
-        "docker",
-        "docker-compose",
-        "docker-buildx",
-        "docker-outside-of-docker"
-    ]
+    "installDockerBuildx": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Docker Buildx"
+    },
+    "installDockerComposeSwitch": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Compose Switch (provided docker compose is available) which is a replacement to the Compose V1 docker-compose (python) executable. It translates the command line into Compose V2 docker compose then runs the latter."
+    },
+    "enableDockerAutocompletion": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable Docker CLI autocompletion"
+    }
+  },
+  "entrypoint": "/usr/local/share/docker-init.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "mounts": [
+    {
+      "source": "/var/run/docker.sock",
+      "target": "/var/run/docker-host.sock",
+      "type": "bind"
+    }
+  ],
+  "installsAfter": [
+    "ghcr.io/bartventer/arch-devcontainer-features/common-utils"
+  ],
+  "keywords": [
+    "arch linux",
+    "docker",
+    "docker-compose",
+    "docker-buildx",
+    "docker-outside-of-docker"
+  ]
 }

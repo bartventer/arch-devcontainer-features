@@ -5,13 +5,14 @@ set -euo pipefail
 # This script upgrades the devcontainer-feature-lock.json files in the src directory.
 
 DRYRUN=${DRYRUN:-false}
-ARCHLINUX_CONTAINER_NAME="archlinux-vercmp"
+ARCHLINUX_CONTAINER_NAME="archlinux-vercmp-$(date +%s)"
 
 start_archlinux_container() {
     echo "Starting Arch Linux container..."
     docker run -d --rm --name "$ARCHLINUX_CONTAINER_NAME" archlinux:latest bash -c "
         pacman-key --init &&
         pacman-key --populate archlinux &&
+        pacman -Sy --noconfirm archlinux-keyring &&
         pacman -Sy --noconfirm pacman-contrib &&
         tail -f /dev/null
     "
@@ -83,11 +84,11 @@ compare_versions() {
     esac
 
     if [[ "$result" -eq 1 ]]; then
-        echo "Current version ($current_version) is newer than the latest version ($latest_version)."
+        echo ":: No update needed: Current version ($current_version) is newer than the latest version ($latest_version)."
     elif [[ "$result" -eq -1 ]]; then
-        echo "A new version is available: $latest_version (current: $current_version)."
+        echo ":: Update available: A new version is available: $latest_version (current: $current_version)."
     elif [[ "$result" -eq 0 ]]; then
-        echo "Current version ($current_version) is up-to-date."
+        echo ":: No update needed: Current version ($current_version) is up-to-date."
     else
         echo "Error comparing versions. Expected 0, 1, or -1 but got $result."
         exit 1
@@ -123,41 +124,41 @@ process_feature_lock_files() {
             echo "Versioning Type: $versioning_type"
 
             local latest_version=""
-            if [ "$versioning_type" == "archlinux" ]; then
+            case "$versioning_type" in
+            archlinux)
                 if [ -n "$archlinux_source" ]; then
                     latest_version=$(fetch_archlinux_version "$archlinux_source")
-                    if [ -z "$latest_version" ]; then
-                        echo "Error: Failed to fetch the latest version for $name."
-                        continue
-                    fi
                 else
                     echo "Error: archlinuxSource is required for archlinux versioning."
                     continue
                 fi
-            elif [ "$versioning_type" == "semver" ] || [ "$versioning_type" == "custom" ]; then
+                ;;
+            semver | custom)
                 if [ -n "$check_latest_command" ]; then
                     latest_version=$(fetch_custom_version "$check_latest_command")
-                    if [ -z "$latest_version" ]; then
-                        echo "Error: Failed to fetch the latest version for $name."
-                        continue
-                    fi
                 else
                     echo "Error: checkLatestCommand is required for $versioning_type versioning."
                     continue
                 fi
-            else
+                ;;
+            *)
                 echo "Unknown versioning type: $versioning_type"
                 continue
+                ;;
+            esac
+            if [ -z "$latest_version" ]; then
+                echo "Error: Failed to fetch the latest version for $name."
+                continue
             fi
-
             echo "Latest Version: $latest_version"
+
             compare_versions "$current_version" "$latest_version" "$versioning_type"
             if [[ "$result" -eq -1 ]]; then
                 if [ "$DRYRUN" == "false" ]; then
                     jq --arg name "$name" --arg version "$latest_version" '(.packages[] | select(.name == $name) | .version) = $version' "$file" >"$file.tmp" && mv "$file.tmp" "$file"
-                    echo -e "\033[0;32mUpdated $file version for $name ($current_version -> $latest_version).\033[0m"
+                    echo -e "\033[0;32m:: Updated $file version for $name ($current_version -> $latest_version).\033[0m"
                 else
-                    echo -e "\033[0;33mDRYRUN: Would update $file version for $name ($current_version -> $latest_version).\033[0m"
+                    echo -e "\033[0;33m:: DRYRUN: Would update $file version for $name ($current_version -> $latest_version).\033[0m"
                 fi
             fi
 
@@ -172,5 +173,5 @@ process_feature_lock_files() {
 
 start_archlinux_container
 wait_for_archlinux_container
-trap stop_archlinux_container EXIT
 process_feature_lock_files
+stop_archlinux_container

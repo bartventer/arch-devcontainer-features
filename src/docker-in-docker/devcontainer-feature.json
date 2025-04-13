@@ -1,85 +1,85 @@
 {
-    "id": "docker-in-docker",
-    "version": "1.3.5",
-    "name": "Docker (Docker-in-Docker)",
-    "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/docker-in-docker",
-    "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
-    "description": "Create child containers *inside* a container, independent from the host's docker instance. Installs Docker extension in the container along with needed CLIs.",
-    "options": {
-        "version": {
-            "type": "string",
-            "proposals": [
-                "latest",
-                "none",
-                "20.10"
-            ],
-            "default": "latest",
-            "description": "Select or enter a Docker/Moby Engine version. (Availability can vary by OS version.)"
-        },
-        "dockerDashComposeVersion": {
-            "type": "string",
-            "enum": [
-                "none",
-                "v1",
-                "v2"
-            ],
-            "default": "v2",
-            "description": "Compose version to use for docker-compose (v1 or v2 or none)"
-        },
-        "azureDnsAutoDetection": {
-            "type": "boolean",
-            "default": true,
-            "description": "Allow automatically setting the dockerd DNS server when the installation script detects it is running in Azure"
-        },
-        "dockerDefaultAddressPool": {
-            "type": "string",
-            "default": "",
-            "proposals": [],
-            "description": "Define default address pools for Docker networks. e.g. base=192.168.0.0/16,size=24"
-        },
-        "installDockerBuildx": {
-            "type": "boolean",
-            "default": true,
-            "description": "Install Docker Buildx"
-        },
-        "installDockerComposeSwitch": {
-            "type": "boolean",
-            "default": true,
-            "description": "Install Compose Switch (provided docker compose is available) which is a replacement to the Compose V1 docker-compose (python) executable. It translates the command line into Compose V2 docker compose then runs the latter."
-        },
-        "enableDockerAutocompletion": {
-            "type": "boolean",
-            "default": true,
-            "description": "Enable Docker CLI autocompletion"
-        }
+  "id": "docker-in-docker",
+  "version": "1.3.5",
+  "name": "Docker (Docker-in-Docker)",
+  "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/docker-in-docker",
+  "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
+  "description": "Create child containers *inside* a container, independent from the host's docker instance. Installs Docker extension in the container along with needed CLIs.",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": [
+        "latest",
+        "none",
+        "20.10"
+      ],
+      "default": "latest",
+      "description": "Select or enter a Docker/Moby Engine version. (Availability can vary by OS version.)"
     },
-    "entrypoint": "/usr/local/share/docker-init.sh",
-    "privileged": true,
-    "containerEnv": {
-        "DOCKER_BUILDKIT": "1"
+    "dockerDashComposeVersion": {
+      "type": "string",
+      "enum": [
+        "none",
+        "v1",
+        "v2"
+      ],
+      "default": "v2",
+      "description": "Compose version to use for docker-compose (v1 or v2 or none)"
     },
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "ms-azuretools.vscode-docker"
-            ]
-        }
+    "azureDnsAutoDetection": {
+      "type": "boolean",
+      "default": true,
+      "description": "Allow automatically setting the dockerd DNS server when the installation script detects it is running in Azure"
     },
-    "mounts": [
-        {
-            "source": "dind-var-lib-docker-${devcontainerId}",
-            "target": "/var/lib/docker",
-            "type": "volume"
-        }
-    ],
-    "installsAfter": [
-        "ghcr.io/bartventer/arch-devcontainer-features/common-utils"
-    ],
-    "keywords": [
-        "arch linux",
-        "docker",
-        "docker-compose",
-        "dind",
-        "docker-in-docker"
-    ]
+    "dockerDefaultAddressPool": {
+      "type": "string",
+      "default": "",
+      "proposals": [],
+      "description": "Define default address pools for Docker networks. e.g. base=192.168.0.0/16,size=24"
+    },
+    "installDockerBuildx": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Docker Buildx"
+    },
+    "installDockerComposeSwitch": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Compose Switch (provided docker compose is available) which is a replacement to the Compose V1 docker-compose (python) executable. It translates the command line into Compose V2 docker compose then runs the latter."
+    },
+    "enableDockerAutocompletion": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable Docker CLI autocompletion"
+    }
+  },
+  "entrypoint": "/usr/local/share/docker-init.sh",
+  "privileged": true,
+  "containerEnv": {
+    "DOCKER_BUILDKIT": "1"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "mounts": [
+    {
+      "source": "dind-var-lib-docker-${devcontainerId}",
+      "target": "/var/lib/docker",
+      "type": "volume"
+    }
+  ],
+  "installsAfter": [
+    "ghcr.io/bartventer/arch-devcontainer-features/common-utils"
+  ],
+  "keywords": [
+    "arch linux",
+    "docker",
+    "docker-compose",
+    "dind",
+    "docker-in-docker"
+  ]
 }

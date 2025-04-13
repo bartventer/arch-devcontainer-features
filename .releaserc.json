@@ -1,40 +1,40 @@
 {
-    "debug": true,
-    "branches": [
-        "+([0-9])?(.{+([0-9]),x}).x",
-        "main",
-        {
-            "name": "beta",
-            "prerelease": true
-        }
+  "debug": true,
+  "branches": [
+    "+([0-9])?(.{+([0-9]),x}).x",
+    "main",
+    {
+      "name": "beta",
+      "prerelease": true
+    }
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "./scripts/generate_assets.sh --dist dist --version ${nextRelease.version}"
+      }
     ],
-    "plugins": [
-        "@semantic-release/commit-analyzer",
-        "@semantic-release/release-notes-generator",
-        [
-            "@semantic-release/exec",
-            {
-                "prepareCmd": "./scripts/generate_assets.sh --dist dist --version ${nextRelease.version}"
-            }
-        ],
-        [
-            "@semantic-release/github",
-            {
-                "assets": [
-                    {
-                        "path": "dist/arch-devcontainer-features-*.tar.gz",
-                        "label": "Arch Linux Devcontainer Features for v${nextRelease.version} (tar.gz)"
-                    },
-                    {
-                        "path": "dist/checksums.txt",
-                        "label": "Checksums for v${nextRelease.version} (plaintext)"
-                    },
-                    {
-                        "path": "dist/checksums.txt.asc",
-                        "label": "Checksums for v${nextRelease.version} (signature)"
-                    }
-                ]
-            }
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "dist/arch-devcontainer-features-*.tar.gz",
+            "label": "Arch Linux Devcontainer Features for v${nextRelease.version} (tar.gz)"
+          },
+          {
+            "path": "dist/checksums.txt",
+            "label": "Checksums for v${nextRelease.version} (plaintext)"
+          },
+          {
+            "path": "dist/checksums.txt.asc",
+            "label": "Checksums for v${nextRelease.version} (signature)"
+          }
         ]
+      }
     ]
+  ]
 }
