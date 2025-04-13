@@ -45,7 +45,7 @@
 
 set -euo pipefail
 
-DRY_RUN=${1:-"false"}
+DRYRUN=${1:-"false"}
 
 # GitHub Actions environment variables
 CI=${CI:-"false"}
@@ -182,14 +182,14 @@ update_version_file() {
     fi
     log_info "==> Version file path: $version_file_path"
     if [ "$CI" = "true" ]; then
-        jq --indent 4 --arg new_version "$new_version" '.version |= $new_version' $version_file_path >"$version_file_path.tmp" &&
+        jq --arg new_version "$new_version" '.version |= $new_version' $version_file_path >"$version_file_path.tmp" &&
             mv "$version_file_path.tmp" $version_file_path ||
             { log_fatal "Failed to update version file"; }
     else
         log_warn "Dry run enabled. Redirecting output to stdout. \
                     \n :: feature: $feature \
                     \n :: new_version: $new_version"
-        jq --indent 4 --arg new_version "$new_version" '.version |= $new_version' $version_file_path
+        jq --arg new_version "$new_version" '.version |= $new_version' $version_file_path
     fi
 }
 
@@ -213,7 +213,7 @@ commit_push_and_create_pr() {
     commit_message="$commit_message [skip ci]"
 
     # Dry run
-    if [ "$DRY_RUN" = "true" ]; then
+    if [ "$DRYRUN" = "true" ]; then
         log_warn "Dry run enabled. Skipping commit, push and PR creation. Redirecting output to stdout.
                     \n :: Commit message: $commit_message
                     \n :: PR body: \n$body"
@@ -298,7 +298,7 @@ $workflow_info"
 }
 
 main() {
-    if [ "$DRY_RUN" = "true" ]; then
+    if [ "$DRYRUN" = "true" ]; then
         log_warn "Running in dry run mode. No changes will be made."
     fi
     log_info "Installing dependencies..."
