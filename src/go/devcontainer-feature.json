@@ -12,7 +12,8 @@
             "description": "Version of golangci-lint to install (https://github.com/golangci/golangci-lint/releases).",
             "proposals": [
                 "latest",
-                "v1.58.1",
+                "v2.1.1",
+                "v1.64.8",
                 "none"
             ]
         },
@@ -51,9 +52,15 @@
     "customizations": {
         "vscode": {
             "settings": {
-                "go.lintTool": "golangci-lint",
+                // See https://github.com/golang/vscode-go/issues/3732#issuecomment-2758960259
+                "go.lintTool": "golangci-lint-v2",
                 "go.lintFlags": [
-                    "--fast",
+                    "run",
+                    "--issues-exit-code=0",
+                    "--output.text.colors=true",
+                    "--output.text.path=stdout",
+                    "--output.text.print-issued-lines=false",
+                    "--show-stats=false",
                     "--fix"
                 ],
                 "gopls": {
