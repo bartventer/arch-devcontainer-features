@@ -1,4 +1,9 @@
-name: 'Tests'
+name: Tests
+description: |
+  This workflow runs tests for devcontainer features.
+  It generates tests for each feature and base image combination,
+  and validates the devcontainer-feature.json files.
+  It also creates a pull request to update the image version if changes are detected.
 on:
     push:
         branches: [main]
