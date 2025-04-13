@@ -52,7 +52,6 @@
   "customizations": {
     "vscode": {
       "settings": {
-        // See https://github.com/golang/vscode-go/issues/3732#issuecomment-2758960259
         "go.lintTool": "golangci-lint-v2",
         "go.lintFlags": [
           "run",
