@@ -7,7 +7,7 @@
     },
     {
       "name": "curl",
-      "version": "8.13.0-1",
+      "version": "8.13.0-2",
       "versionScheme": "archlinux"
     }
   ]
