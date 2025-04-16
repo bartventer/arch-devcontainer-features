@@ -1,0 +1,60 @@
+name: Upgrade Lockfiles
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 1" # Runs every Monday at midnight UTC
+
+jobs:
+  upgrade-devcontainer-features:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+
+      - name: Run upgrade script
+        id: upgrade-script
+        shell: bash
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq curl
+          make upgrade-lockfiles
+
+          [[ -z "$(git status --porcelain)" ]] && echo "No changes detected." && exit 0
+          echo "Changes detected. Proceeding to push changes."
+          git config --global user.name "GitHub Action"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config pull.rebase false
+
+          branch_name="update-lockfiles-${GITHUB_RUN_ID}"
+          git checkout -b $branch_name
+
+          git add src/*/devcontainer-feature.json src/*/devcontainer-feature-lock.json
+
+          changelog=$(cat features-changelog.md)
+          git commit \
+            -m "fix: Automated devcontainer features update" \
+            -m "This PR updates the devcontainer features to the latest versions detected by the 'scripts/feature_lock.sh' script." \
+            -m ":robot: This PR was created by a GitHub Action" \
+            -m "$changelog" \
+            -m "Co-authored-by: Bart Venter <bartventer@outlook.com>" || export NO_UPDATES=true
+          
+          [[ $NO_UPDATES == "true" ]] && echo "No updates to commit." && exit 0
+          git push origin "$branch_name"
+          pr_url=$(gh pr create \
+            --fill \
+            --label "devcontainer" \
+            --assignee ${{github.actor}} \
+            --reviewer ${{github.actor}}
+          )
+          gh pr merge "${pr_url}" --admin --rebase --delete-branch
