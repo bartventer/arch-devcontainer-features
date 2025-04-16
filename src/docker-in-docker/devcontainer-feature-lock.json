@@ -2,9 +2,8 @@
   "packages": [
     {
       "name": "docker",
-      "version": "1:28.0.4-2",
-      "versioningType": "archlinux",
-      "archlinuxSource": "https://archlinux.org/packages/extra/x86_64/docker/"
+      "version": "1-28.0.4-2",
+      "versionScheme": "archlinux"
     }
   ]
 }

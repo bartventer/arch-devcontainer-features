@@ -3,7 +3,7 @@
     {
       "name": "google-cloud-sdk",
       "version": "517.0.0",
-      "versioningType": "semver",
+      "versionScheme": "semver",
       "checkLatestCommand": "curl -sL https://dl.google.com/dl/cloudsdk/channels/rapid/components-2.json | jq -r '.version'"
     }
   ]

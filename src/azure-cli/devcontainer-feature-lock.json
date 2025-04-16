@@ -3,8 +3,7 @@
     {
       "name": "azure-cli",
       "version": "2.71.0-1",
-      "versioningType": "archlinux",
-      "archlinuxSource": "https://archlinux.org/packages/extra/any/azure-cli/"
+      "versionScheme": "archlinux"
     }
   ]
 }

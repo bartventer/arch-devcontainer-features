@@ -2,38 +2,33 @@
   "packages": [
     {
       "name": "go",
-      "version": "2:1.24.2-1",
-      "versioningType": "archlinux",
-      "archlinuxSource": "https://archlinux.org/packages/extra/x86_64/go/"
+      "version": "2-1.24.2-1",
+      "versionScheme": "archlinux"
     },
     {
       "name": "goreleaser",
       "version": "2.7.0-1",
-      "versioningType": "archlinux",
-      "archlinuxSource": "https://archlinux.org/packages/extra/x86_64/goreleaser/"
+      "versionScheme": "archlinux"
     },
     {
       "name": "gox",
       "version": "1.0.1-7",
-      "versioningType": "archlinux",
-      "archlinuxSource": "https://archlinux.org/packages/extra/x86_64/gox/"
+      "versionScheme": "archlinux"
     },
     {
       "name": "ko",
       "version": "0.17.1-1",
-      "versioningType": "archlinux",
-      "archlinuxSource": "https://archlinux.org/packages/extra/x86_64/ko/"
+      "versionScheme": "archlinux"
     },
     {
       "name": "yaegi",
       "version": "0.16.1-1",
-      "versioningType": "archlinux",
-      "archlinuxSource": "https://archlinux.org/packages/extra/x86_64/yaegi/"
+      "versionScheme": "archlinux"
     },
     {
       "name": "golangci-lint",
       "version": "2.1.1",
-      "versioningType": "semver",
+      "versionScheme": "semver",
       "checkLatestCommand": "curl -sL https://api.github.com/repos/golangci/golangci-lint/releases/latest | jq -r '.tag_name | ltrimstr(\"v\")'"
     }
   ]
