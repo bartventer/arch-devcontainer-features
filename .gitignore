@@ -129,7 +129,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-
 # Custom
 __test.sh
 scripts/review.sh
+features-changelog.json
+features-changelog.md
