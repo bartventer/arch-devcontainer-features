@@ -56,8 +56,6 @@ jobs:
           git push origin "$branch_name"
           pr_url=$(gh pr create \
             --fill \
-            --label "devcontainer" \
-            --assignee ${{github.actor}} \
-            --reviewer ${{github.actor}}
+            --label "devcontainer"
           )
           gh pr merge "${pr_url}" --admin --rebase --delete-branch
