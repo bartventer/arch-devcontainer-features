@@ -24,12 +24,15 @@ jobs:
         uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
 
       - name: Run upgrade script
-        id: upgrade-script
         shell: bash
         run: |
           sudo apt-get update && sudo apt-get install -y jq curl
           make upgrade-lockfiles
-
+      - name: Create PR for Lockfiles
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
           [[ -z "$(git status --porcelain)" ]] && echo "No changes detected." && exit 0
           echo "Changes detected. Proceeding to push changes."
           git config --global user.name "GitHub Action"
@@ -48,7 +51,7 @@ jobs:
             -m ":robot: This PR was created by a GitHub Action" \
             -m "$changelog" \
             -m "Co-authored-by: Bart Venter <bartventer@outlook.com>" || export NO_UPDATES=true
-          
+
           [[ $NO_UPDATES == "true" ]] && echo "No updates to commit." && exit 0
           git push origin "$branch_name"
           pr_url=$(gh pr create \
