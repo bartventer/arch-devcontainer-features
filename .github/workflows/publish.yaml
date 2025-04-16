@@ -3,63 +3,61 @@ description: |
   This workflow publishes devcontainer features and generates documentation.
   It creates a pull request for the documentation if changes are detected.
 on:
-    workflow_dispatch:
-    workflow_run: 
-        workflows: ['Tests']
-        branches: ['main']
-        types:
-            - completed
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Tests"]
+    branches: ["main"]
+    types:
+      - completed
 jobs:
-    publish:
-        name: Publish Features
-        runs-on: ubuntu-latest
-        permissions:
-            contents: write
-            pull-requests: write
-            packages: write
-        steps:
-            - uses: actions/checkout@v4
-            - name: 'Publish Features'
-              uses: devcontainers/action@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  publish-features: 'true'
-                  base-path-to-features: './src'
-                  generate-docs: 'true'
+  publish:
+    name: Publish Features
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Publish Features"
+        uses: devcontainers/action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          publish-features: "true"
+          base-path-to-features: "./src"
+          generate-docs: "true"
 
-            - name: Create PR for Documentation
-              id: push_image_info
-              shell: bash
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                  set -e
-                  cleanup() {
-                    echo "🧹 Cleaning up..."
-                    git checkout -
-                    echo "✔️ OK. Cleaned up."
-                  }
-                  trap cleanup EXIT
-                  echo "🚀 Creating PR for documentation..."
-                  git config --global user.email ${{vars.GH_ACTIONS_USERNAME}}@users.noreply.github.com
-                  git config --global user.name ${{vars.GH_ACTIONS_USERNAME}}
-                  git config pull.rebase false
-                  branch=automated-documentation-update-$GITHUB_RUN_ID
-                  git checkout -b $branch
-                  git add */**/README.md
-                  git commit \
-                    -m "docs(src/all): Automated documentation update [skip ci]" \
-                    -m ":robot: This PR was created by a GitHub Action" \
-                    -m "Co-authored-by: Bart Venter <bartventer@outlook.com>" || export NO_UPDATES=true
-                  
-                  [[ $NO_UPDATES == "true" ]] && echo "No updates to commit." && exit 0
-                  git push origin "$branch"
-                  pr_url=$(gh pr create \
-                    --fill \
-                    --label "documentation" \
-                    --assignee ${{github.actor}} \
-                    --reviewer ${{github.actor}}
-                  )
+      - name: Create PR for Documentation
+        id: push_image_info
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          cleanup() {
+            echo "🧹 Cleaning up..."
+            git checkout -
+            echo "✔️ OK. Cleaned up."
+          }
+          trap cleanup EXIT
+          echo "🚀 Creating PR for documentation..."
+          git config --global user.email ${{vars.GH_ACTIONS_USERNAME}}@users.noreply.github.com
+          git config --global user.name ${{vars.GH_ACTIONS_USERNAME}}
+          git config pull.rebase false
+          branch=automated-documentation-update-$GITHUB_RUN_ID
+          git checkout -b $branch
+          git add */**/README.md
+          git commit \
+            -m "docs(src/all): Automated documentation update [skip ci]" \
+            -m ":robot: This PR was created by a GitHub Action" \
+            -m "Co-authored-by: Bart Venter <bartventer@outlook.com>" || export NO_UPDATES=true
 
-                  gh pr merge "${pr_url}" --admin --rebase --delete-branch
+          [[ $NO_UPDATES == "true" ]] && echo "No updates to commit." && exit 0
+          git push origin "$branch"
+          pr_url=$(gh pr create \
+            --fill \
+            --label "documentation"
+          )
+
+          gh pr merge "${pr_url}" --admin --rebase --delete-branch
