@@ -21,7 +21,7 @@ jobs:
           - archlinux:base-devel
           - archlinux:multilib-devel
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: "Install Dependencies"
         run: yarn global add @devcontainers/cli
@@ -36,7 +36,7 @@ jobs:
       matrix:
         feature: ${{fromJson(vars.FEATURES_JSON)}}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: "Install Dependencies"
         run: yarn global add @devcontainers/cli
@@ -47,7 +47,7 @@ jobs:
   test-global:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: "Install Dependencies"
         run: yarn global add @devcontainers/cli
@@ -64,11 +64,11 @@ jobs:
       contents: write
       issues: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
       - name: Setup Node.js
-        uses: bartventer/devcontainer-images/.github/actions/setup-node@v2.3.0
+        uses: bartventer/devcontainer-images/.github/actions/setup-node@c698f9d771b2a0a838a6b0c5f2cbb2ea673256d5 # v2.3.1
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
