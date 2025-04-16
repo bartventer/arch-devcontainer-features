@@ -3,7 +3,6 @@
 # Dev Container Features
 
 [![Release](https://img.shields.io/github/release/bartventer/arch-devcontainer-features.svg)](https://github.com/bartventer/arch-devcontainer-features/releases/latest)
-[![Release Workflow](https://github.com/bartventer/arch-devcontainer-features/actions/workflows/release.yaml/badge.svg)](https://github.com/bartventer/arch-devcontainer-features/actions/workflows/release.yaml)
 [![Test Workflow](https://github.com/bartventer/arch-devcontainer-features/actions/workflows/test.yaml/badge.svg)](https://github.com/bartventer/arch-devcontainer-features/actions/workflows/test.yaml)
 [![License](https://img.shields.io/github/license/bartventer/arch-devcontainer-features.svg)](LICENSE)
 
