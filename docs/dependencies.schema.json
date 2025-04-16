@@ -22,18 +22,18 @@
           "version": {
             "type": "string",
             "description": "The version of the package.",
-            "pattern": "^(\\d+:)?[0-9]+(\\.[0-9]+)*(\\-[a-zA-Z0-9]+)?(-[0-9]+)?$",
+            "pattern": "^(\\d+-)?[0-9]+(\\.[0-9]+)*(\\-[a-zA-Z0-9]+)?(-[0-9]+)?$",
             "examples": [
               "1.0.0",
               "2.3.4-beta",
-              "2:1.24.1-2",
-              "1:2.0.0",
+              "2-1.24.1-2",
+              "1-2.0.0",
               "3.1.4-1"
             ]
           },
-          "versioningType": {
+          "versionScheme": {
             "type": "string",
-            "description": "The type of versioning used by the package.",
+            "description": "The version scheme of the package.",
             "enum": [
               "semver",
               "archlinux",
@@ -43,18 +43,6 @@
               "semver",
               "archlinux",
               "custom"
-            ]
-          },
-          "description": {
-            "type": "string",
-            "description": "A short description of the package (optional)."
-          },
-          "archlinuxSource": {
-            "type": "string",
-            "description": "The Arch Linux source URL for the package (optional).",
-            "format": "uri",
-            "examples": [
-              "https://archlinux.org/packages/extra/x86_64/git/"
             ]
           },
           "checkLatestCommand": {
@@ -68,43 +56,26 @@
         "required": [
           "name",
           "version",
-          "versioningType"
+          "versionScheme"
         ],
         "additionalProperties": false,
         "allOf": [
           {
             "if": {
               "properties": {
-                "versioningType": {
+                "versionScheme": {
                   "const": "archlinux"
                 }
               }
             },
             "then": {
-              "properties": {
-                "archlinuxSource": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "archlinuxSource"
-              ]
+              "not": {
+                "required": [
+                  "checkLatestCommand"
+                ]
+              }
             },
             "else": {
-              "properties": {
-                "versioningType": {
-                  "enum": [
-                    "semver",
-                    "custom"
-                  ]
-                },
-                "checkLatestCommand": {
-                  "type": "string"
-                },
-                "archlinuxSource": {
-                  "type": "null"
-                }
-              },
               "required": [
                 "checkLatestCommand"
               ]
