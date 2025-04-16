@@ -4,14 +4,14 @@ description: |
   It creates a pull request for the documentation if changes are detected.
 on:
     workflow_dispatch:
-    pull_request:
-        types: [closed]
-        paths: ['src/**']
-        branches:
-            - main
+    workflow_run: 
+        workflows: ['Tests']
+        branches: ['main']
+        types:
+            - completed
 jobs:
     publish:
-        name: 'Publish Features'
+        name: Publish Features
         runs-on: ubuntu-latest
         permissions:
             contents: write
@@ -52,10 +52,14 @@ jobs:
                     -m "docs(src/all): Automated documentation update [skip ci]" \
                     -m ":robot: This PR was created by a GitHub Action" \
                     -m "Co-authored-by: Bart Venter <bartventer@outlook.com>" || export NO_UPDATES=true
-                  if [ "$NO_UPDATES" != "true" ] ; then
-                      git push origin "$branch"
-                      gh pr create \
-                        --fill \
-                        --assignee ${{github.actor}} \
-                        --label "documentation"
-                  fi
+                  
+                  [[ $NO_UPDATES == "true" ]] && echo "No updates to commit." && exit 0
+                  git push origin "$branch"
+                  pr_url=$(gh pr create \
+                    --fill \
+                    --label "documentation" \
+                    --assignee ${{github.actor}} \
+                    --reviewer ${{github.actor}}
+                  )
+
+                  gh pr merge "${pr_url}" --admin --rebase --delete-branch
