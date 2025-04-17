@@ -44,11 +44,6 @@ test-scenarios: ## Run scenario tests for a specific feature. Argument: FEATURES
 	$(DC_TEST) $(DC_TEST_SCENARIOS_FLAGS) $(PATH_TO_RUN)
 
 ## Build:
-.PHONY: bump-version
-bump-version: ## Run bump_version.sh script. Arguments: DRYRUN.
-	chmod +x $(SCRIPTSDIR)/bump_version.sh
-	$(SCRIPTSDIR)/bump_version.sh $(DRYRUN)
-
 .PHONY: upgrade-lockfiles
 upgrade-lockfiles: ## Run upgrade_lockfiles.sh script. Arguments: DRYRUN.
 	chmod +x $(SCRIPTSDIR)/upgrade_lockfiles.sh
