@@ -2,7 +2,7 @@ name: Upgrade Lockfiles
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * 1" # Runs every Monday at midnight UTC
+    - cron: "0 1 * * *" # Every day at 01:00 UTC (1 hour after bartventer/devcontainer-images' cron job)
 
 jobs:
   upgrade-devcontainer-features:
@@ -54,8 +54,5 @@ jobs:
 
           [[ $NO_UPDATES == "true" ]] && echo "No updates to commit." && exit 0
           git push origin "$branch_name"
-          pr_url=$(gh pr create \
-            --fill \
-            --label "devcontainer"
-          )
+          pr_url=$(gh pr create --fill --label "devcontainer")
           gh pr merge "${pr_url}" --admin --rebase --delete-branch
