@@ -5,7 +5,7 @@ description: |
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ["Tests"]
+    workflows: ["Tests", "Upgrade Lockfiles"]
     branches: ["main"]
     types:
       - completed
