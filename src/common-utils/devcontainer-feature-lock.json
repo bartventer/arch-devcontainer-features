@@ -1,13 +1,48 @@
 {
   "packages": [
     {
+      "name": "curl",
+      "version": "8.13.0-2",
+      "versionScheme": "archlinux"
+    },
+    {
       "name": "git",
       "version": "2.49.0-1",
       "versionScheme": "archlinux"
     },
     {
-      "name": "curl",
-      "version": "8.13.0-2",
+      "name": "github-cli",
+      "version": "2.71.2-1",
+      "versionScheme": "archlinux"
+    },
+    {
+      "name": "go-yq",
+      "version": "4.45.1-1",
+      "versionScheme": "archlinux"
+    },
+    {
+      "name": "jq",
+      "version": "1.7.1-2",
+      "versionScheme": "archlinux"
+    },
+    {
+      "name": "make",
+      "version": "4.4.1-2",
+      "versionScheme": "archlinux"
+    },
+    {
+      "name": "nodejs",
+      "version": "23.9.0-1",
+      "versionScheme": "archlinux"
+    },
+    {
+      "name": "npm",
+      "version": "11.3.0-1",
+      "versionScheme": "archlinux"
+    },
+    {
+      "name": "yarn",
+      "version": "1.22.22-2",
       "versionScheme": "archlinux"
     }
   ]
