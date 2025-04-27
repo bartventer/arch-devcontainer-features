@@ -16,7 +16,7 @@
       "description": "List of additional packages to install. Simplifies inclusion of packages that would otherwise need separate features in non-Arch OS.",
       "default": "",
       "proposals": [
-        "nodejs yarn npm make jq yq github-cli"
+        "nodejs yarn npm make jq go-yq github-cli"
       ]
     },
     "configureZshAsDefaultShell": {
