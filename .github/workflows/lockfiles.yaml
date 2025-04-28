@@ -1,4 +1,7 @@
 name: Upgrade Lockfiles
+description: |
+  This workflow updates the devcontainer features lockfiles to the latest versions.
+  It creates a pull request for the lockfiles if changes are detected.
 on:
   workflow_dispatch:
   schedule:
@@ -34,7 +37,7 @@ jobs:
         shell: bash
         run: |
           [[ -z "$(git status --porcelain)" ]] && echo "No changes detected." && exit 0
-          echo "Changes detected. Proceeding to push changes."
+          echo "🚀 Creating PR for lockfiles..."
           git config --global user.name "GitHub Action"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config pull.rebase false
@@ -46,7 +49,7 @@ jobs:
 
           changelog=$(cat features-changelog.md)
           git commit \
-            -m "fix: Automated devcontainer features update" \
+            -m "build: Automated lockfile update" \
             -m "This PR updates the devcontainer features to the latest versions detected by the 'scripts/feature_lock.sh' script." \
             -m ":robot: This PR was created by a GitHub Action" \
             -m "$changelog" \
