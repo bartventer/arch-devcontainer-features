@@ -1,4 +1,5 @@
 {
     "name": "Devcontainer-Features",
-    "image": "ghcr.io/bartventer/arch-devcontainer-features/devcontainer:latest"
+    "image": "ghcr.io/bartventer/devcontainer-images/dind-archlinux:latest",
+    "postCreateCommand": "yarn install"
 }
