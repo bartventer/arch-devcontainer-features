@@ -36,20 +36,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -e
-          cleanup() {
-            echo "🧹 Cleaning up..."
-            git checkout -
-            echo "✔️ OK. Cleaned up."
-          }
-          trap cleanup EXIT
+          [[ -z "$(git status --porcelain)" ]] && echo "No changes detected." && exit 0
           echo "🚀 Creating PR for documentation..."
-          git config --global user.email ${{vars.GH_ACTIONS_USERNAME}}@users.noreply.github.com
-          git config --global user.name ${{vars.GH_ACTIONS_USERNAME}}
+          git config --global user.name "GitHub Action"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config pull.rebase false
-          branch=automated-documentation-update-$GITHUB_RUN_ID
+
+          branch="update-docs-${GITHUB_RUN_ID}"
           git checkout -b $branch
-          git add */**/README.md
+
+          git add src/*/README.md
+
           git commit \
             -m "docs(src/all): Automated documentation update [skip ci]" \
             -m ":robot: This PR was created by a GitHub Action" \
@@ -57,9 +54,5 @@ jobs:
 
           [[ $NO_UPDATES == "true" ]] && echo "No updates to commit." && exit 0
           git push origin "$branch"
-          pr_url=$(gh pr create \
-            --fill \
-            --label "documentation"
-          )
-
+          pr_url=$(gh pr create --fill --label "documentation")
           gh pr merge "${pr_url}" --admin --rebase --delete-branch
