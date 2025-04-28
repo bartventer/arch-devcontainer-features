@@ -87,6 +87,7 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - run: yarn install
       - name: Run semantic-release
         run: yarn run semantic-release
         env:
