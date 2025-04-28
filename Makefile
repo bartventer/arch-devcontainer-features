@@ -16,7 +16,7 @@ FEATURES_FILTER ?= ## Filter for features. Default: empty. Change this in the Ma
 PRESERVE_TESTCONTAINERS ?= false ## Preserve test containers. Default: false. Change this in the Makefile or in the environment.
 
 # Devcontainer command
-DC=devcontainer
+DC=yarn devcontainer
 DC_TEST=$(DC) features test
 
 # Devcontainer flags
