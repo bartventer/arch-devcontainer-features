@@ -102,7 +102,7 @@ install_arch_packages() {
 
     # Install zsh (and recommended packages) if needed
     if [ "${INSTALL_ZSH}" = "true" ] && ! type zsh >/dev/null 2>&1; then
-        check_and_install_packages zsh zsh-completions
+        check_and_install_packages zsh zsh-autocomplete zsh-completions zsh-syntax-highlighting
     fi
 
     PACKAGES_ALREADY_INSTALLED="true"
