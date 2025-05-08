@@ -1,16 +1,11 @@
 {
   "id": "aws-cli",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "name": "AWS CLI",
   "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/aws-cli",
   "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
   "description": "Installs the AWS CLI along with needed dependencies. Useful for base Dockerfiles that often are missing required install dependencies like gpg.",
   "options": {
-    "enableShellCompletion": {
-      "type": "boolean",
-      "default": true,
-      "description": "Enable shell completions for the AWS CLI. This will add the necessary shell completions to your shell profile."
-    },
     "installSam": {
       "type": "string",
       "enum": [
