@@ -223,7 +223,6 @@ install_go_and_tools() {
 
   echo "${GO_TOOLS}" | xargs -n 1 go install
 
-  # Completion directories
   _BASH_COMPLETION_DIR="/etc/bash_completion.d"
   _ZSH_COMPLETION_DIR="/usr/share/zsh/site-functions"
   _FISH_COMPLETION_DIR="/usr/share/fish/vendor_completions.d"

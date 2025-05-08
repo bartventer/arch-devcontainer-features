@@ -37,7 +37,6 @@ while (("$#")); do
     esac
 done
 
-# Validations
 [[ -z "${_DIST_DIR:-}" ]] && echo "Error: --dist flag is required" && exit 1
 [[ -z "${_VERSION:-}" ]] && echo "Error: --version flag is required" && exit 1
 [[ "${_VERSION}" != v* ]] && _VERSION="v${_VERSION}"
@@ -50,20 +49,16 @@ cat <<EOT
     - Root directory: $_ROOT
 EOT
 
-# Create the dist directory if it doesn't exist
 mkdir -p "$_DIST_DIR"
 
-# Create a tarball of the repository
 _FILENAME=$(basename "${_REPOSITORY_NAME}-${_VERSION}.tar.gz")
 tar -czf "$_DIST_DIR/${_FILENAME}" --exclude="$_DIST_DIR" -C "$_ROOT" .
 
-# Generate checksum for the tarball
 (
     cd "$_DIST_DIR" || exit
     sha256sum "${_FILENAME}" >checksums.txt
 )
 
-# Sign the checksums file
 gpg --detach-sign --armor "$_DIST_DIR/checksums.txt"
 
 echo
