@@ -16,7 +16,6 @@ DOCKER_DEFAULT_ADDRESS_POOL="${DOCKERDEFAULTADDRESSPOOL:-""}"
 USERNAME="${USERNAME:-"${_REMOTE_USER:-"automatic"}"}"
 INSTALL_DOCKER_BUILDX="${INSTALLDOCKERBUILDX:-"true"}"
 INSTALL_DOCKER_COMPOSE_SWITCH="${INSTALLDOCKERCOMPOSESWITCH:-"true"}"
-ENABLE_DOCKER_AUTOCOMPLETION="${ENABLEDOCKERAUTOCOMPLETION:-"true"}"
 
 # Determine architecture
 architecture=$(uname -m)
@@ -181,36 +180,23 @@ if [ "${INSTALL_DOCKER_BUILDX}" = "true" ]; then
     find "${docker_home}" -type d -print0 | xargs -n 1 -0 chmod g+s
 fi
 
-# enable_autocompletion installs the Docker CLI autocompletion script for the specified shell
-enable_autocompletion() {
-    local completion_path=$1
-    local completion_url=$2
+declare -A _completion_paths=(
+    ["${HOME}/.zsh/completions/_docker"]="https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker"
+    ["${HOME}/.bash_completion.d/docker"]="https://raw.githubusercontent.com/docker/cli/master/contrib/completion/bash/docker"
+    ["${HOME}/.config/fish/completions/docker.fish"]="https://raw.githubusercontent.com/docker/cli/master/contrib/completion/fish/docker.fish"
+)
 
-    if [ ! -f "${completion_path}" ]; then
-        echo "Enabling autocompletion for ${SHELL}..."
-        mkdir -p "$(dirname "${completion_path}")"
-        curl -L "${completion_url}" >"${completion_path}"
+for _completion_path in "${!_completion_paths[@]}"; do
+    _completion_url="${_completion_paths[$_completion_path]}"
+    if [ ! -f "${_completion_path}" ]; then
+        echo "Enabling shell auto-completion for docker (${_completion_path})..."
+        mkdir -p "$(dirname "${_completion_path}")"
+        curl -sSL -o "${_completion_path}" "${_completion_url}"
         echo "OK. Autocompletion enabled."
     fi
-}
+done
 
-# Enable Docker CLI autocompletion
-if [ "${ENABLE_DOCKER_AUTOCOMPLETION}" = "true" ]; then
-    case "${SHELL}" in
-    */zsh)
-        enable_autocompletion "${HOME}/.zsh/completions/_docker" "https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker"
-        ;;
-    */bash)
-        enable_autocompletion "${HOME}/.bash_completion.d/docker" "https://raw.githubusercontent.com/docker/cli/master/contrib/completion/bash/docker"
-        ;;
-    */fish)
-        enable_autocompletion "${HOME}/.config/fish/completions/docker.fish" "https://raw.githubusercontent.com/docker/cli/master/contrib/completion/fish/docker.fish"
-        ;;
-    *)
-        echo "Shell ${SHELL} not supported for autocompletion."
-        ;;
-    esac
-fi
+unset _completion_paths
 
 tee /usr/local/share/docker-init.sh >/dev/null \
     <<EOF
