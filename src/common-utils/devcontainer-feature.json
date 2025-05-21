@@ -1,6 +1,6 @@
 {
   "id": "common-utils",
-  "version": "1.4.14",
+  "version": "1.4.15",
   "name": "Common Utilities",
   "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/common-utils",
   "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
