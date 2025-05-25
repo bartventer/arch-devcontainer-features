@@ -32,12 +32,12 @@
     },
     {
       "name": "nodejs",
-      "version": "24.0.2-1",
+      "version": "24.1.0-1",
       "versionScheme": "archlinux"
     },
     {
       "name": "npm",
-      "version": "11.4.0-1",
+      "version": "11.4.1-1",
       "versionScheme": "archlinux"
     },
     {
