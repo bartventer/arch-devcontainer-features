@@ -1,6 +1,6 @@
 {
   "id": "go",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "name": "Go",
   "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/go",
   "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
