@@ -12,7 +12,7 @@
     },
     {
       "name": "github-cli",
-      "version": "2.74.0-1",
+      "version": "2.74.1-1",
       "versionScheme": "archlinux"
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "name": "nodejs",
-      "version": "24.1.0-2",
+      "version": "24.2.0-1",
       "versionScheme": "archlinux"
     },
     {
