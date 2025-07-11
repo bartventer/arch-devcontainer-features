@@ -12,12 +12,12 @@
     },
     {
       "name": "github-cli",
-      "version": "2.74.2-1",
+      "version": "2.75.0-1",
       "versionScheme": "archlinux"
     },
     {
       "name": "go-yq",
-      "version": "4.45.4-1",
+      "version": "4.46.1-1",
       "versionScheme": "archlinux"
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "name": "nodejs",
-      "version": "24.3.0-1",
+      "version": "24.4.0-1",
       "versionScheme": "archlinux"
     },
     {
