@@ -27,7 +27,7 @@
     },
     {
       "name": "golangci-lint",
-      "version": "2.3.0",
+      "version": "2.3.1",
       "versionScheme": "semver",
       "checkLatestCommand": "curl -sL https://api.github.com/repos/golangci/golangci-lint/releases/latest | jq -r '.tag_name | ltrimstr(\"v\")'"
     }
