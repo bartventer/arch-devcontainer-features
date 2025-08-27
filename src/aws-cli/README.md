@@ -15,6 +15,7 @@ Installs the AWS CLI along with needed dependencies. Useful for base Dockerfiles
 
 | Options Id | Description | Type | Default Value |
 |-----|-----|-----|-----|
+| version | AWS CLI version to install. | string | latest |
 | installSam | Install the AWS SAM CLI (https://docs.aws.amazon.com/serverless-application-model/) via the specified method. | string | none |
 | samVersion | SAM CLI version (https://github.com/aws/aws-sam-cli/releases). Only applicable if `installSam` is set to `standalone`. | string | latest |
 
