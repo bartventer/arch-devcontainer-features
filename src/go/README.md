@@ -15,6 +15,7 @@ Installs Go and common Go utilities.
 
 | Options Id | Description | Type | Default Value |
 |-----|-----|-----|-----|
+| goVersion | Version of Go to install (https://go.dev/dl/, https://github.com/golang/go/tags). | string | latest |
 | golangciLintVersion | Version of golangci-lint to install (https://github.com/golangci/golangci-lint/releases). | string | latest |
 | installGoReleaser | Whether to install GoReleaser (https://goreleaser.com/). | boolean | false |
 | installGox | Whether to install gox, a tool for Go cross compilation that parallelizes builds for multiple platforms (https://github.com/mitchellh/gox). | boolean | false |
