@@ -4,6 +4,11 @@
       "name": "aws-cli",
       "version": "1.42.16-1",
       "versionScheme": "archlinux"
+    },
+    {
+      "name": "aws-cli-v2",
+      "version": "2.27.55-1",
+      "versionScheme": "archlinux"
     }
   ]
 }
