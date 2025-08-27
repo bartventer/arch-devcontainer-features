@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # MIT License
 #
 # Copyright (c) 2024 Bart Venter <bartventer@outlook.com>
@@ -27,6 +27,7 @@
 
 set -e
 
+GOVERSION=${GOVERSION:-"latest"}
 GOLANGCI_LINT_VERSION=${GOLANGCILINTVERSION:-"latest"}
 INSTALL_GO_RELEASER=${INSTALLGORELEASER:-"false"}
 INSTALL_GOX=${INSTALLGOX:-"false"}
@@ -120,9 +121,9 @@ golangci_lint_v2_compatibility() {
 # dump_golangci_upgrade_script creates a script to upgrade GolangCI-Lint.
 dump_golangci_upgrade_script() {
   echo_msg "Creating upgrade script for GolangCI-Lint..."
-  upgrade_script_path="/usr/local/bin/go-golangci-lint-upgrade.sh"
-  mkdir -p "$(dirname "$upgrade_script_path")"
-  cat <<'EOF' >"$upgrade_script_path"
+  golangci_upgrade_script_path="/usr/local/bin/go-golangci-lint-upgrade.sh"
+  mkdir -p "$(dirname "$golangci_upgrade_script_path")"
+  cat <<'EOF' >"$golangci_upgrade_script_path"
 #!/usr/bin/env bash
 # This script upgrades GolangCI-Lint to the specified version or the latest version.
 # Usage: ./go-golangci-lint-upgrade.sh <version>
@@ -166,18 +167,174 @@ fi
 
 echo "GolangCI-Lint upgraded to version $GOLANGCI_LINT_VERSION."
 EOF
-  chmod +x "$upgrade_script_path"
-  echo "Upgrade script created at $upgrade_script_path"
+  chmod +x "$golangci_upgrade_script_path"
+  echo "Upgrade script created at $golangci_upgrade_script_path"
   echo "You can run the script with the following command:"
-  echo "  $upgrade_script_path <version>"
+  echo "  $golangci_upgrade_script_path <version>"
   echo "Replace <version> with the desired version (e.g., latest, v2, 1.50.0)."
   echo "You can also run the script without arguments to install the latest version."
 }
 
+get_go_version() {
+  local requested_version=${1:-"latest"}
+  local all_versions # Example versions: go1.20.5, go1.21rc1
+  all_versions=$(git ls-remote --tags "https://github.com/golang/go.git" |
+    awk '$2 ~ /^refs\/tags\/go[[:digit:]]+\.[[:alnum:]]+(\.[[:digit:]]+)?$/ {print $2}' |
+    sed 's|refs/tags/||' |
+    sort -V)
+  log_available_versions() {
+    echo "Available Go versions are:"
+    awk '{print "  - " $0}' <<<"$all_versions"
+  }
+  case "$requested_version" in
+  latest)
+    # latest stable version (ignore rc/beta/alpha versions)
+    grep -E '^go[0-9]+\.[0-9]+(\.[0-9]+)?$' <<<"$all_versions" | tail -n 1
+    return
+    ;;
+  go*)
+    # specific version requested, e.g., go1.20.5
+    if grep -qx "$requested_version" <<<"$all_versions"; then
+      echo "$requested_version"
+      return
+    else
+      echo "Error: Version '$requested_version' not found."
+      log_available_versions
+      exit 1
+    fi
+    ;;
+  *)
+    echo "Error: Invalid version format '$requested_version'. Use 'latest' or 'go<version>' (e.g., go1.20.5)."
+    log_available_versions
+    exit 1
+    ;;
+  esac
+}
+
+get_go_architecture() {
+  local arch
+  arch=$(uname -m)
+  case $arch in
+  x86_64) echo "amd64" ;;
+  aarch64 | armv8*) echo "arm64" ;;
+  i?86) echo "386" ;;
+  *)
+    echo "Error: Unsupported architecture '$arch'. Supported architectures are x86_64 (amd64), aarch64 (arm64), and i386 (386)."
+    exit 1
+    ;;
+  esac
+}
+
+install_go() {
+  check_and_install_packages curl tar gawk sed git
+  local go_version go_architecture
+  go_version=$(get_go_version "$1")
+  go_architecture=$(get_go_architecture)
+  local download_url="https://go.dev/dl/${go_version}.linux-${go_architecture}.tar.gz"
+  echo_msg "Installing Go version $go_version for architecture $go_architecture..."
+
+  echo "Removing any existing Go installation"
+  rm -rfv "$TARGET_GOROOT"
+
+  echo "Downloading and extracting Go from $download_url to $(dirname "$TARGET_GOROOT")..."
+  curl -sSL "$download_url" | tar -C "$(dirname "$TARGET_GOROOT")" -xz
+  echo_ok "Go $go_version installed to $TARGET_GOROOT."
+}
+
+dump_go_upgrade_script() {
+  echo_msg "Creating upgrade script for Go..."
+  go_upgrade_script_path="/usr/local/bin/go-upgrade.sh"
+  mkdir -p "$(dirname "$go_upgrade_script_path")"
+  cat <<'EOF' >"$go_upgrade_script_path"
+#!/usr/bin/env bash
+# This script upgrades Go to the specified version.
+# Usage: ./go-upgrade.sh <version>
+# Example: ./go-upgrade.sh go1.20.5
+set -euo pipefail
+
+install_go() {
+  local go_version="$1"
+  local go_architecture
+  go_architecture=$(uname -m)
+  case $go_architecture in
+  x86_64) go_architecture="amd64" ;;
+  aarch64 | armv8*) go_architecture="arm64" ;;
+  i?86) go_architecture="386" ;;
+  *)
+    echo "Error: Unsupported architecture '$go_architecture'. Supported architectures are x86_64 (amd64), aarch64 (arm64), and i386 (386)."
+    exit 1
+    ;;
+  esac
+  local download_url="https://go.dev/dl/${go_version}.linux-${go_architecture}.tar.gz"
+  local target_goroot="/usr/local/go"
+  echo "Removing any existing Go installation"
+  rm -rfv "$target_goroot"
+  echo "Downloading and extracting Go from $download_url to $(dirname "$target_goroot")..."
+  curl -sSL "$download_url" | tar -C "$(dirname "$target_goroot")" -xz
+  echo "Go $go_version installed to $target_goroot."
+}
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <version>"
+    echo "Example: $0 go1.20.5"
+    echo "See https://go.dev/dl/ and https://github.com/golang/go/tags for available versions."
+    exit 1
+fi
+install_go "$1"
+EOF
+  chmod +x "$go_upgrade_script_path"
+  echo_ok "Upgrade script created at $go_upgrade_script_path"
+  echo "You can run the script with the following command:"
+  echo "  $go_upgrade_script_path <version>"
+  echo "Replace <version> with the desired version (e.g., go1.20.5)."
+}
+
+dump_go_tools_upgrade_script() {
+  local go_tools="$1"
+
+  echo_msg "Creating upgrade script for Go tools..."
+  go_tools_list_path="/usr/local/share/go-tools-list.txt"
+  echo "$go_tools" >"$go_tools_list_path"
+  go_tools_upgrade_script_path="/usr/local/bin/go-tools-upgrade.sh"
+  mkdir -p "$(dirname "$go_tools_upgrade_script_path")"
+  cat <<'EOF' >"$go_tools_upgrade_script_path"
+#!/usr/bin/env bash
+# This script upgrades all Go tools listed in /usr/local/share/go-tools-list.txt.
+# Usage: ./go-tools-upgrade.sh
+set -euo pipefail
+TOOLS_LIST="/usr/local/share/go-tools-list.txt"
+if [ ! -f "$TOOLS_LIST" ]; then
+    echo "Error: Tools list file '$TOOLS_LIST' not found."
+    exit 1
+fi
+while IFS= read -r tool; do
+    if [ -n "$tool" ]; then
+        tool_name=$(basename "$(echo "$tool" | cut -d'@' -f1)")
+        if command -v "$tool_name" >/dev/null 2>&1; then
+            echo "Removing existing binary: $tool_name"
+            rm -fv "$(command -v "$tool_name")"
+        fi
+        echo "Installing/upgrading tool: $tool"
+        go install -v "$tool" || {
+            echo "Error: Failed to install/upgrade tool '$tool'."
+            exit 1
+        }
+    fi
+done <"$TOOLS_LIST"
+echo "All Go tools upgraded."
+EOF
+  chmod +x "$go_tools_upgrade_script_path"
+  echo_ok "Upgrade script created at $go_tools_upgrade_script_path"
+  echo "You can run the script with the following command:"
+  echo "  $go_tools_upgrade_script_path"
+}
+
 install_go_and_tools() {
-  echo_msg "Installing Go and Go tools..."
+  install_go "${GOVERSION}"
+  dump_go_upgrade_script
+
+  echo_msg "Installing Go tools..."
   # go-tools: https://gitlab.archlinux.org/archlinux/packaging/packages/go-tools/-/blob/main/PKGBUILD?ref_type=heads
-  PACKAGES="go go-tools delve which jq"
+  PACKAGES="go-tools delve which jq"
   if [ "$INSTALL_GO_RELEASER" = "true" ]; then
     PACKAGES="$PACKAGES goreleaser"
   fi
@@ -195,18 +352,7 @@ install_go_and_tools() {
 
   # Install Go tools that are isImportant && !replacedByGopls based on
   # https://github.com/golang/vscode-go/blob/v0.46.1/extension/src/goToolsInformation.ts
-  GO_TOOLS="\
-    golang.org/x/tools/gopls@latest \
-    honnef.co/go/tools/cmd/staticcheck@latest \
-    github.com/mgechev/revive@latest \
-    github.com/incu6us/goimports-reviser/v2@latest \
-    github.com/segmentio/golines@latest \
-    github.com/fatih/gomodifytags@latest \
-    github.com/cweill/gotests/gotests@latest \
-    github.com/josharian/impl@latest \
-    golang.org/x/lint/golint@latest \
-    github.com/haya14busa/goplay/cmd/goplay@latest \
-    github.com/766b/go-outliner@latest"
+  GO_TOOLS=$(cat tools.txt)
 
   if [ "$GOLANGCI_LINT_VERSION" != "none" ]; then
     GOLANGCI_LINT_PACKAGE=$(get_golangci_package_path "$GOLANGCI_LINT_VERSION")
@@ -249,6 +395,8 @@ install_go_and_tools() {
     echo_ok "golangci-lint completion scripts installed."
   fi
 
+  dump_go_tools_upgrade_script "$GO_TOOLS"
+
   echo_ok "Go and Go tools installed."
 }
 
@@ -282,7 +430,7 @@ setup_golang_group() {
   else
     echo "Warning: User $USERNAME does not exist. Skipping group addition."
   fi
-  mkdir -p "$TARGET_GOROOT" "$TARGET_GOPATH"
+  mkdir -pv "$TARGET_GOROOT" "$TARGET_GOPATH"
   echo_ok "Go group and directories set up."
 }
 

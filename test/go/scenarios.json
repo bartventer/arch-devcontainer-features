@@ -1,4 +1,13 @@
 {
+    "go_version_specified": {
+        "image": "archlinux:latest",
+        "features": {
+            "go": {
+                "goVersion": "go1.25rc1",
+                "golangciLintVersion": "none"
+            }
+        }
+    },
     "go_no_golangci_lint": {
         "image": "archlinux:latest",
         "features": {

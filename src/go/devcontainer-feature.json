@@ -6,6 +6,16 @@
   "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
   "description": "Installs Go and common Go utilities.",
   "options": {
+    "goVersion": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of Go to install (https://go.dev/dl/, https://github.com/golang/go/tags).",
+      "proposals": [
+        "latest",
+        "go1.25.0",
+        "go1.25rc1"
+      ]
+    },
     "golangciLintVersion": {
       "type": "string",
       "default": "latest",
@@ -79,8 +89,8 @@
   },
   "containerEnv": {
     "GOPATH": "/go",
-    "GOROOT": "/usr/lib/go",
-    "PATH": "/go/bin:/usr/lib/go/bin:${PATH}"
+    "GOROOT": "/usr/local/go",
+    "PATH": "/go/bin:/usr/local/go/bin:${PATH}"
   },
   "capAdd": [
     "SYS_PTRACE"
