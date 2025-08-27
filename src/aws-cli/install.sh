@@ -89,6 +89,7 @@ install_sam_standalone() {
   sam_sig_filename="${sam_filename}.sig"
   curl -sSL -o "${tmp_dir}/${sam_sig_filename}" "${sam_url}.sig"
 
+  gpg --keyserver keyserver.ubuntu.com --recv-keys C7A05F43FE0ADDFA || true
   echo_msg "Importing the primary public key..."
   gpg --import "sam-primary-public-key.txt"
 
