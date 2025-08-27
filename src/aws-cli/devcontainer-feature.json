@@ -6,6 +6,16 @@
   "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
   "description": "Installs the AWS CLI along with needed dependencies. Useful for base Dockerfiles that often are missing required install dependencies like gpg.",
   "options": {
+    "version": {
+      "type": "string",
+      "enum": [
+        "latest",
+        "2",
+        "1"
+      ],
+      "default": "latest",
+      "description": "AWS CLI version to install."
+    },
     "installSam": {
       "type": "string",
       "enum": [

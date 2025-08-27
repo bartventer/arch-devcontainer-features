@@ -10,6 +10,7 @@
 # Set error handling
 set -e
 
+AWSCLI_VERSION=${VERSION:-"latest"}
 INSTALL_SAM=${INSTALLSAM:-"none"}
 SAM_VERSION=${SAMVERSION:-"latest"}
 
@@ -25,16 +26,16 @@ aarch64 | armv8*) architecture="arm64" ;;
 esac
 
 install_aws_cli() {
-  echo "
-#############################################################
-#                                                           #
-#  NOTICE: AWS CLI v2 has been moved to the Arch User       #
-#  Repository (AUR). This script will now default to        #
-#  installing AWS CLI v1 from the official repositories.    #
-#                                                           #
-#############################################################
-"
-  check_and_install_packages aws-cli which
+  packages_to_check=(which)
+  case "${AWSCLI_VERSION}" in
+  latest | 2) packages_to_check+=(aws-cli-v2) ;;
+  1) packages_to_check+=(aws-cli) ;;
+  *)
+    echo "Invalid value for AWSCLI_VERSION. Please set it to 'latest', '2', or '1'."
+    exit 1
+    ;;
+  esac
+  check_and_install_packages "${packages_to_check[@]}"
   echo_ok "AWS CLI installed."
 }
 
