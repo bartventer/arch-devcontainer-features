@@ -252,7 +252,7 @@ install_go_tools() {
   [[ "$INSTALL_AIR" == "true" ]] && echo "github.com/air-verse/air@latest" >>"$go_tools_list_tmpfile"
   [[ "$INSTALL_COBRA_CLI" == "true" ]] && echo "github.com/spf13/cobra-cli@latest" >>"$go_tools_list_tmpfile"
 
-  GOBIN="${TARGET_GOPATH}/bin" bash "$go_tools_install_script_path" "$go_tools_list_tmpfile" || {
+  GOROOT="${TARGET_GOROOT}" GOBIN="${TARGET_GOPATH}/bin" bash "$go_tools_install_script_path" "$go_tools_list_tmpfile" || {
     echo "Error: Failed to install Go tools."
     rm -f "$go_tools_list_tmpfile"
     exit 1
@@ -272,7 +272,7 @@ install_go_tools() {
 #!/usr/bin/env bash
 # Wrapper script to call the Go tools install script with the default tools.txt path.
 set -euo pipefail
-GOBIN="${TARGET_GOPATH}/bin" "$go_tools_install_script_dst_path" "$go_tools_list_dst_path"
+GOROOT="${TARGET_GOROOT}" GOBIN="${TARGET_GOPATH}/bin" "$go_tools_install_script_dst_path" "$go_tools_list_dst_path"
 EOF
   chmod +x "$go_tools_install_wrapper_dst_path"
   echo "Go tools install script copied to $go_tools_install_wrapper_dst_path"

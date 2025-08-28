@@ -28,7 +28,7 @@ install_go_tools() {
     echo "Error: GOBIN environment variable must be set."
     exit 1
   }
-  xargs -n 1 go install -v <<<"$go_tools"
+  xargs -n 1 "${GOROOT}/bin/go" install -v <<<"$go_tools"
   echo "Go tools installed (via go install)."
   if grep -xqE "github.com/golangci/golangci-lint/(v[0-9]+/)?cmd/golangci-lint@([a-zA-Z0-9._-]+)?" <<<"$go_tools"; then
     make_bin_completions "golangci-lint"
