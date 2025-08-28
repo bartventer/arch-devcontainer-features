@@ -248,7 +248,7 @@ install_go_tools() {
   local go_tools_list_tmpfile
   go_tools_list_tmpfile=$(mktemp)
   cat ./share/tools.txt >"$go_tools_list_tmpfile"
-  [[ "$GOLANGCI_LINT_VERSION" != "none" ]] && "$(get_golangci_package_path "$GOLANGCI_LINT_VERSION")" >>"$go_tools_list_tmpfile"
+  [[ "$GOLANGCI_LINT_VERSION" != "none" ]] && echo "$(get_golangci_package_path "$GOLANGCI_LINT_VERSION")" >>"$go_tools_list_tmpfile"
   [[ "$INSTALL_AIR" == "true" ]] && echo "github.com/air-verse/air@latest" >>"$go_tools_list_tmpfile"
   [[ "$INSTALL_COBRA_CLI" == "true" ]] && echo "github.com/spf13/cobra-cli@latest" >>"$go_tools_list_tmpfile"
 
