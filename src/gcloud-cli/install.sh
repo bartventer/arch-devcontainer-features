@@ -67,17 +67,10 @@ install_gcp_cli() {
   rm -rf "${tmp_dir}"
 }
 
-# ***********************
-# ** Utility functions **
-# ***********************
+# Setup script dependencies
+curl -sSL https://raw.githubusercontent.com/bartventer/arch-devcontainer-features/main/scripts/archlinux_util_setup.sh | sh
 
-_UTILS_SETUP_SCRIPT=$(mktemp)
-curl -sSL -o "$_UTILS_SETUP_SCRIPT" https://raw.githubusercontent.com/bartventer/arch-devcontainer-features/main/scripts/archlinux_util_setup.sh
-sh "$_UTILS_SETUP_SCRIPT"
-rm -f "$_UTILS_SETUP_SCRIPT"
-
-# shellcheck disable=SC1091
-# shellcheck source=scripts/archlinux_util.sh
+# shellcheck source=scripts/archlinux_util.sh disable=SC1091
 . archlinux_util.sh
 
 echo_msg "Installing Google Cloud CLI devcontainer feature..."

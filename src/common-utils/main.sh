@@ -129,8 +129,8 @@ rm -f /etc/profile.d/00-restore-env.sh
 echo "export PATH=${PATH//$(sh -lc 'echo $PATH')/\$PATH}" >/etc/profile.d/00-restore-env.sh
 chmod +x /etc/profile.d/00-restore-env.sh
 
-# Bring in ID, ID_LIKE, VERSION_ID, VERSION_CODENAME
-# shellcheck disable=SC1091
+# Get OS info
+# shellcheck source=/etc/os-release disable=SC1091
 . /etc/os-release
 
 # Install packages for appropriate OS

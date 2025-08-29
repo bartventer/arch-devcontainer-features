@@ -27,34 +27,20 @@
 
 set -e
 
-# install_azure_cli Installs the Azure CLI
 install_azure_cli() {
     check_and_install_packages azure-cli
 }
 
-# ***********************
-# ** Utility functions **
-# ***********************
+# Setup script dependencies
+curl -sSL https://raw.githubusercontent.com/bartventer/arch-devcontainer-features/main/scripts/archlinux_util_setup.sh | sh
 
-_UTILS_SETUP_SCRIPT=$(mktemp)
-curl -sSL -o "$_UTILS_SETUP_SCRIPT" https://raw.githubusercontent.com/bartventer/arch-devcontainer-features/main/scripts/archlinux_util_setup.sh
-sh "$_UTILS_SETUP_SCRIPT"
-rm -f "$_UTILS_SETUP_SCRIPT"
-
-# shellcheck disable=SC1091
-# shellcheck source=scripts/archlinux_util.sh
+# shellcheck source=scripts/archlinux_util.sh disable=SC1091
 . archlinux_util.sh
-
-# ==========
-# == Main ==
-# ==========
 
 echo_msg "Installing Azure CLI devcontainer feature..."
 
-# Check if script is run as root
-check_root
-
 # Run checks
+check_root
 check_system
 check_pacman
 
