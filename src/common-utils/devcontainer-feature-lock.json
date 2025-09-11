@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "curl",
-      "version": "8.15.0-1",
+      "version": "8.16.0-1",
       "versionScheme": "archlinux"
     },
     {
@@ -12,7 +12,7 @@
     },
     {
       "name": "github-cli",
-      "version": "2.78.0-1",
+      "version": "2.79.0-1",
       "versionScheme": "archlinux"
     },
     {
