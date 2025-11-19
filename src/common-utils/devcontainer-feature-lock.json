@@ -7,7 +7,7 @@
     },
     {
       "name": "git",
-      "version": "2.51.2-2",
+      "version": "2.52.0-1",
       "versionScheme": "archlinux"
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "name": "nodejs",
-      "version": "25.2.0-1",
+      "version": "25.2.1-1",
       "versionScheme": "archlinux"
     },
     {
