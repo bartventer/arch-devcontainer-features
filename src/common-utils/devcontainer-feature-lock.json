@@ -17,7 +17,7 @@
     },
     {
       "name": "go-yq",
-      "version": "4.49.1-1",
+      "version": "4.49.2-1",
       "versionScheme": "archlinux"
     },
     {
@@ -37,7 +37,7 @@
     },
     {
       "name": "npm",
-      "version": "11.6.3-1",
+      "version": "11.6.4-1",
       "versionScheme": "archlinux"
     },
     {
