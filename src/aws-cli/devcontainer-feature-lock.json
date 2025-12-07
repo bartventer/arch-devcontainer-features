@@ -2,12 +2,12 @@
   "packages": [
     {
       "name": "aws-cli",
-      "version": "1.43.5-1",
+      "version": "1.43.10-1",
       "versionScheme": "archlinux"
     },
     {
       "name": "aws-cli-v2",
-      "version": "2.32.6-1",
+      "version": "2.32.11-1",
       "versionScheme": "archlinux"
     }
   ]
