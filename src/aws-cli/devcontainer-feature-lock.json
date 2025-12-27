@@ -7,7 +7,7 @@
     },
     {
       "name": "aws-cli-v2",
-      "version": "2.32.16-1",
+      "version": "2.32.16-2",
       "versionScheme": "archlinux"
     }
   ]
