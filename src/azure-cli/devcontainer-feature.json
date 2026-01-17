@@ -1,6 +1,6 @@
 {
   "id": "azure-cli",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "name": "Azure CLI",
   "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/azure-cli",
   "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",

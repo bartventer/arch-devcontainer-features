@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "go",
-      "version": "1.25.5",
+      "version": "1.25.6",
       "versionScheme": "semver",
       "checkLatestCommand": "curl -sL https://go.dev/VERSION?m=text | tr -d 'go' | head -1"
     },
