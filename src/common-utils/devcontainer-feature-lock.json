@@ -7,7 +7,7 @@
     },
     {
       "name": "git",
-      "version": "2.52.0-2",
+      "version": "2.53.0-1",
       "versionScheme": "archlinux"
     },
     {
@@ -17,7 +17,7 @@
     },
     {
       "name": "go-yq",
-      "version": "4.52.1-1",
+      "version": "4.52.2-1",
       "versionScheme": "archlinux"
     },
     {
@@ -37,7 +37,7 @@
     },
     {
       "name": "npm",
-      "version": "11.7.0-1",
+      "version": "11.8.0-1",
       "versionScheme": "archlinux"
     },
     {
