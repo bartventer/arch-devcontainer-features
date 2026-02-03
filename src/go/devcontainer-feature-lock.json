@@ -8,7 +8,7 @@
     },
     {
       "name": "goreleaser",
-      "version": "2.13.0-1",
+      "version": "2.13.0-2",
       "versionScheme": "archlinux"
     },
     {
@@ -18,12 +18,12 @@
     },
     {
       "name": "ko",
-      "version": "0.18.0-1",
+      "version": "0.18.0-2",
       "versionScheme": "archlinux"
     },
     {
       "name": "yaegi",
-      "version": "0.16.1-1",
+      "version": "0.16.1-2",
       "versionScheme": "archlinux"
     },
     {
