@@ -1,6 +1,6 @@
 {
   "id": "aws-cli",
-  "version": "1.6.21",
+  "version": "1.6.22",
   "name": "AWS CLI",
   "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/aws-cli",
   "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
