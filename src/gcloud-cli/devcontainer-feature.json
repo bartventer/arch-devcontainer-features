@@ -1,6 +1,6 @@
 {
   "id": "gcloud-cli",
-  "version": "1.0.54",
+  "version": "1.0.55",
   "name": "Google Cloud CLI",
   "documentationURL": "https://github.com/bartventer/arch-devcontainer-features/tree/main/src/gcloud-cli",
   "licenseURL": "https://github.com/bartventer/arch-devcontainer-features/blob/main/LICENSE",
