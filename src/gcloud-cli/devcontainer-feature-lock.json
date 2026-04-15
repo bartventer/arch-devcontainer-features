@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "google-cloud-sdk",
-      "version": "564.0.0",
+      "version": "565.0.0",
       "versionScheme": "semver",
       "checkLatestCommand": "curl -sL https://dl.google.com/dl/cloudsdk/channels/rapid/components-2.json | jq -r '.version'"
     }
