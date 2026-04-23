@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "terraform",
-      "version": "1.14.8-1",
+      "version": "1.14.9-1",
       "versionScheme": "archlinux"
     }
   ]
