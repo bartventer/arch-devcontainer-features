@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "curl",
-      "version": "8.20.0-3",
+      "version": "8.20.0-4",
       "versionScheme": "archlinux"
     },
     {
