@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "azure-cli",
-      "version": "2.85.0-1",
+      "version": "2.86.0-1",
       "versionScheme": "archlinux"
     }
   ]
