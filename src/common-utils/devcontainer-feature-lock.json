@@ -17,7 +17,7 @@
     },
     {
       "name": "go-yq",
-      "version": "4.53.3-1",
+      "version": "4.53.6-1",
       "versionScheme": "archlinux"
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "name": "nodejs",
-      "version": "26.9.0-1",
+      "version": "26.10.0-1",
       "versionScheme": "archlinux"
     },
     {
